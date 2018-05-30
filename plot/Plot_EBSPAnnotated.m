@@ -14,8 +14,7 @@ U.Kstar     =   Crystal_UCell.Astar*RotMat;
 
 
 f1(1)=imagesc(EBSD_Geometry.x_screen,EBSD_Geometry.y_screen,EBSD_Pattern_in,'Parent',s1);
-ylim(s1,[EBSD_Geometry.y_screen(1) EBSD_Geometry.y_screen(end)]);
-xlim(s1,[EBSD_Geometry.x_screen(1) EBSD_Geometry.x_screen(end)]);
+
 axis(s1,'equal','xy');
 hold(s1,'on')
 %label the axes
@@ -110,5 +109,7 @@ if ~isempty(nhat_gnom)
     end
 end
 
+ylim(s1,[EBSD_Geometry.y_screen(1) EBSD_Geometry.y_screen(end)]);
+xlim(s1,[EBSD_Geometry.x_screen(1) EBSD_Geometry.x_screen(end)]);
 end
 

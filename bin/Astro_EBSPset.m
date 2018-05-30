@@ -452,6 +452,9 @@ function Index_Pat(source,eventdata)
         drawnow();
         
         set(h_indexed,'Units','pix'); axis(h_indexed,'equal'); axis(h_indexed,'tight'); set(h_indexed,'Units','normalized');
+        set(h_indexed,'XLim',[EBSP_single.PatternGeometry.x_gn_min EBSP_single.PatternGeometry.x_gn_max]);
+        set(h_indexed,'YLim',[EBSP_single.PatternGeometry.y_gn_min EBSP_single.PatternGeometry.y_gn_max]);
+        
         set(h_indexed,'Visible','on');
         
         drawnow();
