@@ -72,6 +72,13 @@ if ~isfield(Settings_Cor,'gfilt')
     Settings_Cor.gfilt=0;
 end
 
+if ~isfield(Settings_Cor,'SplitBG')
+    Settings_Cor.SplitBG=0;
+end
+
+if ~isfield(Settings_Cor,'Square')
+    Settings_Cor.Square=0;
+end
 %% Start the corrections
 %cor the pattern for hot pixels
 if Settings_Cor.hotpixel == 1
@@ -80,6 +87,21 @@ end
 
 if Settings_Cor.RealBG == 1
     EBSP2=EBSP2./Settings_Cor.EBSP_bg;
+end
+
+if Settings_Cor.SplitBG == 1
+    EBSPw=size(EBSP2,2);
+    
+    EBSP2a=EBSP2(:,1:EBSPw/2);
+    EBSP2b=EBSP2(:,EBSPw/2+1:end);
+    
+    gf=Settings_Cor.gfilt_s*size(EBSP2a,1)/100;
+    EBSP2a_g = imgaussfilt(EBSP2a,gf);
+    EBSP2b_g = imgaussfilt(EBSP2b,gf);
+    
+    EBSP2=[EBSP2a./EBSP2a_g EBSP2b./EBSP2b_g];
+
+    
 end
 
 
@@ -95,6 +117,13 @@ else
 end
 outputs.size=cs;
 
+if Settings_Cor.Square == 1
+    %square crop on minimum dimension
+    ms=min(outputs.size);
+    cv=floor(outputs.size/2);
+    stepv=(1:ms)-floor(ms/2);
+    EBSP2=EBSP2(cv(1)+stepv,cv(2)+stepv);
+end
 
 if Settings_Cor.gfilt == 1
     gf=Settings_Cor.gfilt_s*size(EBSP2,1)/100;
@@ -129,6 +158,8 @@ if Settings_Cor.radius == 1
 else
     EBSP2=fix_mean(EBSP2);
 end
+
+
 
 end
 
