@@ -338,7 +338,7 @@ f.Visible = 'on';
 uiwait(f,300);
 %% sub functions
 
-    function Update_BG(source,eventdata)
+    function Update_BG(~,eventdata)
         Settings_Cor.hotpixel=get(h_check_hot,'value');
         Settings_Cor.hot_thresh=str2double(get(h_check_hotthres,'string'));
         

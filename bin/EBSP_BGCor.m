@@ -26,6 +26,8 @@ function [ EBSP2,outputs ] = EBSP_BGCor( EBSP,Settings_Cor )
 % 
 % Settings_Cor.RealBG=0; %use a real BG
 % Settings_Cor.EBSP_bgnum=30; %number of real pattern to use for BG
+% 
+% Settings_Cor.SquareCrop=1; %crop to a square
 %
 %OUTPUTS
 %   EBSP2 = corrected ESBP array (as double)
@@ -43,6 +45,9 @@ EBSP2=EBSP;
 %check fields exist & create if needed - this is ordered in the order of
 %operations to aid with debugging & adding new correction routines 
 %as needed
+if ~isfield(Settings_Cor,'SquareCrop')
+    Settings_Cor.SquareCrop=0;
+end
 
 if ~isfield(Settings_Cor,'hotpixel')
     Settings_Cor.hotpixel=0;
@@ -80,6 +85,16 @@ if ~isfield(Settings_Cor,'Square')
     Settings_Cor.Square=0;
 end
 %% Start the corrections
+
+if Settings_Cor.SquareCrop == 1 %crop the image to a square
+    EBSP_size=min(size(EBSP2));
+    crop.centre = [size(EBSP2, 2)/2 size(EBSP2, 1)/2];
+    s=1:EBSP_size; s=s-mean(s);
+    sy=s+crop.centre(2)+0.5;
+    sx=s+crop.centre(1)+0.5;
+    EBSP2=EBSP2(sy,sx);
+end
+
 %cor the pattern for hot pixels
 if Settings_Cor.hotpixel == 1
     [EBSP2,outputs.hotpixl_num]=cor_hotpix(EBSP2,Settings_Cor.hot_thresh);
@@ -110,7 +125,7 @@ EBSP2=fix_mean(EBSP2);
 
 %resize the image
 if Settings_Cor.resize == 1
-    cs=floor([Settings_Cor.size Settings_Cor.size*size(EBSP,2)/size(EBSP,1)]);
+    cs=floor([Settings_Cor.size Settings_Cor.size*size(EBSP2,2)/size(EBSP2,1)]);
     EBSP2 = imresize(EBSP2,cs);
 else
     cs=size(EBSP2);

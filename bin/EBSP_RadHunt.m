@@ -23,8 +23,11 @@ function [ Peak_Centre,Peak_Quality,Peak_Set,R_EBSP,R_Edge,R_RHO,R_theta ] = EBS
 %transform
 R_theta=-Settings_Rad.theta_range(1):Settings_Rad.theta_range(3):Settings_Rad.theta_range(2);
 [R_EBSP,R_RHO]=radon(EBSP,R_theta);
+[R_EBSP_b,R_RHO]=radon(EBSP*0+1,R_theta);
+R_EBSP=R_EBSP./R_EBSP_b;
 %remove the areas outside the mask
 R_EBSP(R_EBSP==0)=NaN;
+R_EBSP(R_EBSP_b==0)=NaN;
 R_RHO_num=numel(R_RHO);
 
 Settings_Rad.rho_search_pix=Settings_Rad.rho_search_per*R_RHO_num;

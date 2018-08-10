@@ -24,6 +24,8 @@ else
     PC=PCin;
 end
 
+EBSP.size=PatternInfo.size;
+
 EBSP.ScreenAspect=double(PatternInfo.size(2)/PatternInfo.size(1));
 
 EBSP.y_gn_max= PC(2)/PC(3);
