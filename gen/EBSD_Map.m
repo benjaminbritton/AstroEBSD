@@ -11,28 +11,36 @@ function [AreaData] = EBSD_Map( MapData,MicroscopeData )
 %
 %Updated 18/06/2018 (TBB) to deal with the pattern structure more properly
 
-NCOLS=double(MicroscopeData.NCOLS);
-NROWS=double(MicroscopeData.NROWS);
+%update 24/08/2018 (TBB)
+% NCOLS=double(MicroscopeData.NCOLS);
+%deal with reduced area data - assume rectangular croppping
+NCOLS=double(max(MapData.XBeam)-min(MapData.XBeam))+1;
+NROWS=double(max(MapData.YBeam)-min(MapData.YBeam))+1;
+% NROWS=double(MicroscopeData.NROWS);
 max_pats=NCOLS*NROWS;
-%%
+if max_pats ~= double(size(MapData.DD,1))
+    error('This map is not rectangular')
+end
+
+%% sort the data
 pv_list=sub2ind(double([MicroscopeData.NCOLS MicroscopeData.NROWS]),double(MapData.XBeam),double(MapData.YBeam));
 [pv_list2,ix]=sort(pv_list);
-AreaData.PMap=reshape(pv_list2,[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.DD=reshape(double(MapData.DD(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.MAD=reshape(double(MapData.MAD(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.MADPhase=reshape(double(MapData.MADPhase(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.NIndexedBands=reshape(double(MapData.NIndexedBands(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.PCX=reshape(double(MapData.PCX(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.PCY=reshape(double(MapData.PCY(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.PHI=reshape(double(MapData.PHI(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.phi2=reshape(double(MapData.phi2(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.phi1=reshape(double(MapData.phi1(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.RadonQuality=reshape(double(MapData.RadonQuality(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
+AreaData.PMap=reshape(pv_list2,[NCOLS NROWS])';
+AreaData.DD=reshape(double(MapData.DD(ix)),[NCOLS NROWS])';
+AreaData.MAD=reshape(double(MapData.MAD(ix)),[NCOLS NROWS])';
+AreaData.MADPhase=reshape(double(MapData.MADPhase(ix)),[NCOLS NROWS])';
+AreaData.NIndexedBands=reshape(double(MapData.NIndexedBands(ix)),[NCOLS NROWS])';
+AreaData.PCX=reshape(double(MapData.PCX(ix)),[NCOLS NROWS])';
+AreaData.PCY=reshape(double(MapData.PCY(ix)),[NCOLS NROWS])';
+AreaData.PHI=reshape(double(MapData.PHI(ix)),[NCOLS NROWS])';
+AreaData.phi2=reshape(double(MapData.phi2(ix)),[NCOLS NROWS])';
+AreaData.phi1=reshape(double(MapData.phi1(ix)),[NCOLS NROWS])';
+AreaData.RadonQuality=reshape(double(MapData.RadonQuality(ix)),[NCOLS NROWS])';
 
-AreaData.XBeam_Map=reshape(double(MapData.XBeam(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.YBeam_Map=reshape(double(MapData.YBeam(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.XSample=reshape(double(MapData.XSample(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
-AreaData.YSample=reshape(double(MapData.YSample(ix)),[MicroscopeData.NCOLS MicroscopeData.NROWS])';
+AreaData.XBeam_Map=reshape(double(MapData.XBeam(ix)),[NCOLS NROWS])';
+AreaData.YBeam_Map=reshape(double(MapData.YBeam(ix)),[NCOLS NROWS])';
+AreaData.XSample=reshape(double(MapData.XSample(ix)),[NCOLS NROWS])';
+AreaData.YSample=reshape(double(MapData.YSample(ix)),[NCOLS NROWS])';
 
 % PatList2Map=@(data,col,row)fliplr(rot90(reshape(double(data),[double(col) double(row)]),3));
 % 
