@@ -25,7 +25,8 @@ end
 %% sort the data
 pv_list=sub2ind(double([MicroscopeData.NCOLS MicroscopeData.NROWS]),double(MapData.XBeam),double(MapData.YBeam));
 [pv_list2,ix]=sort(pv_list);
-AreaData.PMap=reshape(pv_list2,[NCOLS NROWS])';
+pv_list_set=1:size(pv_list2);
+AreaData.PMap=reshape(pv_list_set(ix),[NCOLS NROWS])';
 AreaData.DD=reshape(double(MapData.DD(ix)),[NCOLS NROWS])';
 AreaData.MAD=reshape(double(MapData.MAD(ix)),[NCOLS NROWS])';
 AreaData.MADPhase=reshape(double(MapData.MADPhase(ix)),[NCOLS NROWS])';

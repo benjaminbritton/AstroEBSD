@@ -84,6 +84,14 @@ end
 if ~isfield(Settings_Cor,'Square')
     Settings_Cor.Square=0;
 end
+
+if ~isfield(Settings_Cor,'SatCor')
+    Settings_Cor.SatCor=0;
+end
+
+if ~isfield(Settings_Cor,'TKDBlur2')
+    Settings_Cor.TKDBlur2=0;
+end
 %% Start the corrections
 
 if Settings_Cor.SquareCrop == 1 %crop the image to a square
@@ -93,6 +101,13 @@ if Settings_Cor.SquareCrop == 1 %crop the image to a square
     sy=s+crop.centre(2)+0.5;
     sx=s+crop.centre(1)+0.5;
     EBSP2=EBSP2(sy,sx);
+end
+
+if Settings_Cor.SatCor == 1 %saturation correction
+    I_noise= imnoise(zeros(size(EBSP2)),'gaussian');
+    I_noise=mean(EBSP2(:))+std(EBSP2(:))*I_noise;
+    mvals=find(EBSP2 == max(EBSP2(:)));
+    EBSP2(mvals)=I_noise(mvals);
 end
 
 %cor the pattern for hot pixels
@@ -138,7 +153,10 @@ if Settings_Cor.Square == 1
     cv=floor(outputs.size/2);
     stepv=(1:ms)-floor(ms/2);
     EBSP2=EBSP2(cv(1)+stepv,cv(2)+stepv);
+    cs=size(EBSP2);
+    outputs.size=cs;
 end
+
 
 if Settings_Cor.gfilt == 1
     gf=Settings_Cor.gfilt_s*size(EBSP2,1)/100;
@@ -174,18 +192,28 @@ else
     EBSP2=fix_mean(EBSP2);
 end
 
-
-
+if Settings_Cor.TKDBlur2 == 1
+    gf=Settings_Cor.gfilt_s*size(EBSP2,1)/200;
+    EBSP2B = imgaussfilt(EBSP2,gf);
+    EBSP2=EBSP2./EBSP2B;
+    for n=1:3
+        EBSP_med = medfilt2(EBSP2);
+        hpix=find(abs(EBSP_med-EBSP2) > 0.8);
+        EBSP2(hpix)=EBSP_med(hpix);
+    end
+%     EBSP2=fix_mean(EBSP2);
+end
 end
 
 function [EBSP2,num_hot]=cor_hotpix(EBSP,hthresh)
 
 %Image correction - modified from JH code
 %median filter
+
 EBSP_med = medfilt2(EBSP);
 
 %hot pixel correct
-h_pix=find((EBSP-EBSP_med)>hthresh); %1000 is chosen as an arbitary number
+h_pix=find(abs(EBSP-EBSP_med)>hthresh); %1000 is chosen as an arbitary number
 EBSP2=EBSP;
 EBSP2(h_pix)=EBSP_med(h_pix);
 num_hot=size(h_pix);

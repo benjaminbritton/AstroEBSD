@@ -335,7 +335,7 @@ movegui(f,'center')
 drawnow;
 f.Visible = 'on';
 
-uiwait(f,300);
+% uiwait(f,300);
 %% sub functions
 
     function Update_BG(~,eventdata)
@@ -358,6 +358,7 @@ uiwait(f,300);
         EBSP_single=get(i_raw,'UserData');
         
         [EBSP_single.ebsp_cor,EBSP_single.PatternInfo ] = EBSP_BGCor( EBSP_single.PatternIn,Settings_Cor );
+        
         [ EBSP_single.Peak_Centre,EBSP_single.Single.Peak_Set_All,EBSP_single.Peak_Set_All,...
             EBSP_single.R_EBSP,EBSP_single.R_Edge,EBSP_single.R_rho,EBSP_single.R_theta ] ...
             = EBSP_RadHunt( EBSP_single.ebsp_cor,Settings_Rad);
