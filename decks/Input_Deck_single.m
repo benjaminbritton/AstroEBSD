@@ -4,7 +4,7 @@ home
 close all
 
 %load key folders into the path
-Astro_FP= 'C:\Users\bbrit\Documents\MATLAB\AstroEBSD'; %please change this to your astro file path
+Astro_FP= 'C:\Users\tbritton\Documents\GitHub\AstroEBSD'; %please change this to your astro file path
 
 InputUser.Mode = 'Isolated'; %modes = 
                              %Isolated = single file 

@@ -335,7 +335,7 @@ movegui(f,'center')
 drawnow;
 f.Visible = 'on';
 
-% uiwait(f,300);
+uiwait(f,300);
 %% sub functions
 
     function Update_BG(~,eventdata)

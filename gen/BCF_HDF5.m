@@ -94,6 +94,18 @@ MicroscopeData.CoordinateSystems=fliplr(rot90(h5read(InputUser.HDF5FullFile,[HDF
 
 MicroscopeData.CoordSystems='TRZP'; %Top Right Z Plus - standard for Bruker Coords - is used in EBSD_Map
 
+EBSP.EDXRaw=[HDF5_info.Groups.Name    '/EDX1/Data/Counts Raw'];
+EBSP.EDXCor=[HDF5_info.Groups.Name    '/EDX1/Data/Counts Corrected'];
+
+MicroscopeData.EDS_AzimutAngle=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/AzimutAngle']);
+MicroscopeData.EDS_Energy=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/Energy']);
+MicroscopeData.EDS_PrimaryEnergy=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/PrimaryEnergy']);
+MicroscopeData.EDS_TiltAngle=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/TiltAngle']);
+MicroscopeData.EDS_NumChan=size(MicroscopeData.EDS_Energy,1);
+
+% MicroscopeData.EDS_AzimutAngle=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/AzimutAngle']);
+% MicroscopeData.EDS_AzimutAngle=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/AzimutAngle']);
+
 %set up the EBSP reader
 
 EBSP.PatternFile=[HDF5_info.Groups.Name    '/EBSD/Data/RawPatterns'];

@@ -130,8 +130,7 @@ if Settings_Cor.SplitBG == 1
     EBSP2b_g = imgaussfilt(EBSP2b,gf);
     
     EBSP2=[EBSP2a./EBSP2a_g EBSP2b./EBSP2b_g];
-
-    
+   
 end
 
 
