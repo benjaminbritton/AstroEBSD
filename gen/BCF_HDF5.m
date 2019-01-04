@@ -97,11 +97,14 @@ MicroscopeData.CoordSystems='TRZP'; %Top Right Z Plus - standard for Bruker Coor
 EBSP.EDXRaw=[HDF5_info.Groups.Name    '/EDX1/Data/Counts Raw'];
 EBSP.EDXCor=[HDF5_info.Groups.Name    '/EDX1/Data/Counts Corrected'];
 
+try
 MicroscopeData.EDS_AzimutAngle=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/AzimutAngle']);
 MicroscopeData.EDS_Energy=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/Energy']);
 MicroscopeData.EDS_PrimaryEnergy=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/PrimaryEnergy']);
 MicroscopeData.EDS_TiltAngle=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/TiltAngle']);
 MicroscopeData.EDS_NumChan=size(MicroscopeData.EDS_Energy,1);
+catch
+end
 
 % MicroscopeData.EDS_AzimutAngle=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/AzimutAngle']);
 % MicroscopeData.EDS_AzimutAngle=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/AzimutAngle']);
