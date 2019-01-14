@@ -21,7 +21,7 @@ function [ Peak_Centre,Peak_Quality,Peak_Set,R_EBSP,R_Edge,R_RHO,R_theta ] = EBS
 %%
 
 %transform
-R_theta=-Settings_Rad.theta_range(1):Settings_Rad.theta_range(3):Settings_Rad.theta_range(2);
+R_theta=Settings_Rad.theta_range(1):Settings_Rad.theta_range(3):Settings_Rad.theta_range(2);
 [R_EBSP,R_RHO]=radon(EBSP,R_theta);
 [R_EBSP_b,R_RHO]=radon(EBSP*0+1,R_theta);
 R_EBSP=R_EBSP./R_EBSP_b;
@@ -112,14 +112,24 @@ end
 Peak_Centre=Peak_Centre(Peak_Ok,:); %remove the repeats
 Peak_Set=Peak_Set(Peak_Ok,:); %remove the repeats
 
-Peak_cx=round(Peak_Centre(:,1)./Settings_Rad.theta_range(3))+Settings_Rad.theta_range(1)+1;
-Peak_cy=round(Peak_Centre(:,2))+floor(size(R_RHO,1)/2)+1;
-pheight=zeros(size(Peak_cx,1),1);
+%find the peak height for the nearest pixel value of this
+npeak=size(Peak_Set,1);
+pheight=zeros(npeak,1);
 
-
-for n=1:size(Peak_cx)
-    pheight(n)=R_EBSP(Peak_cy(n),Peak_cx(n));
+for n=1:npeak
+    [~,Peak_cx]=min(abs(Peak_Centre(n,1)-R_theta));
+    [~,Peak_cy]=min(abs(Peak_Centre(n,2)-R_RHO));
+    pheight(n)=R_EBSP(Peak_cy,Peak_cx);
 end
+
+% Peak_cx=round(Peak_Centre(:,1)./Settings_Rad.theta_range(3))+Settings_Rad.theta_range(1)+1;
+% Peak_cy=round(Peak_Centre(:,2))+floor(size(R_RHO,1)/2)+1;
+% 
+% 
+% 
+% for n=1:size(Peak_cx)
+%     pheight(n)=R_EBSP(Peak_cy(n),Peak_cx(n));
+% end
     
 %Image quality metric (band sharpness, adapted from Kunze 1993)
 edge_height= Peak_Set(:,3)-Peak_Set(:,6);
