@@ -1,10 +1,14 @@
-function Astro_EBSPset(EBSP_one,Settings_Cor,Settings_Rad,Settings_PCin,InputUser)
-% SIMPLE_GUI2 Select a data set from the pop-up menu, then
-% click one of the plot-type push buttons. Clicking the button
-% plots the selected data in the axes.
-
+function [Settings_Cor,Settings_Rad,Settings_PCin]=Astro_EBSPset(EBSP_one,Settings_Cor,Settings_Rad,Settings_PCin,InputUser)
+% Assess how to index the pattern
 
 phases_list=phasefolder_read(InputUser);
+
+%use one background correct to populate settings_cor
+if exist('Settings_Cor') ~= 1
+    Settings_Cor=struct;
+end
+[~,Settings_Cor ] = EBSP_BGCor( EBSP_one.PatternIn,Settings_Cor );
+
 
 %read and set up the PC start
 if isfield(Settings_PCin,'start')
@@ -40,7 +44,7 @@ h_indexed = axes('Units','Pixels','Position',[550 400 200 185],'Parent',f,'Visib
 
 h_cor = axes('Units','Pixels','Position',[300,400,200,185],'Parent',f);
 h_cor.Units = 'normalized';
-axis(h_cor,'equal')
+axis(h_cor,'equal');
 
 h_rad = axes('Units','Pixels','Position',[50,150,200,185],'Parent',f,'title','Radon Transform');
 h_rad.Units = 'normalized';
@@ -68,6 +72,8 @@ hold(h_rad,'on'); s_rad=scatter(EBSP_single.Peak_Centre(:,1),EBSP_single.Peak_Ce
 h_raw.Units='pix'; axis(h_raw,'equal'); axis(h_raw,'tight','xy'); h_raw.Units = 'normalized';
 h_cor.Units='pix'; axis(h_cor,'equal'); axis(h_cor,'tight','xy'); h_cor.Units = 'normalized';
 h_rad.Units='pix'; axis(h_rad,'equal'); axis(h_rad,'tight','xy'); h_rad.Units = 'normalized';
+axis(h_rad,'square') %make the radon square looking
+
 h_indexed.Units='pix'; axis(h_indexed,'equal'); axis(h_indexed,'tight','xy'); h_indexed.Units = 'normalized';
 
 set(i_raw,'UserData',EBSP_single);
@@ -103,6 +109,7 @@ h_check_resize=uicontrol('style','checkbox','string', ...
     'position',[xstart+2*xsep ystart xwid yhig]);
 h_check_resize.Units = 'normalized';
 
+
 h_check_resize_t=uicontrol('style','edit','string', ...
     num2str(Settings_Cor.size),...
     'position',[xstart+2*xsep ystart+ysep xwid yhig]);
@@ -116,7 +123,7 @@ h_check_realbg.Units = 'normalized';
 
 %radius
 h_check_radius=uicontrol('style','checkbox','string', ...
-    'Radius','value', Settings_Cor.resize,...
+    'Radius','value', Settings_Cor.radius,...
     'position',[xstart+3*xsep ystart xwid yhig]);
 h_check_radius.Units = 'normalized';
 
@@ -330,11 +337,17 @@ ebox_indband.Units = 'normalized';
 ebox_repband.Units = 'normalized';
 ebox_maxband.Units = 'normalized';
         
+Update_PC
+Update_BG
+Update_Radon
+        
 %% Make the GUI visible.
 movegui(f,'center')
 drawnow;
 f.Visible = 'on';
 
+disp('AstroEBSD GUI is active')
+disp('Close the window or use CRTL + C to return to the command line');
 uiwait(f,300);
 %% sub functions
 
@@ -345,8 +358,11 @@ uiwait(f,300);
         Settings_Cor.gfilt=get(h_check_gauss,'value');
         Settings_Cor.gfilt_s=str2double(get(h_check_gfilt_s,'string'));
         
+        %extract the size dta
         Settings_Cor.resize=get(h_check_resize,'value');
-        Settings_Cor.size=round(str2double(get(h_check_resize_t,'string')));
+        size_str=get(h_check_resize_t,'string');
+        size_str_sp=strfind(size_str,' ');
+        Settings_Cor.size=[str2double(size_str(1:size_str_sp(1)-1)),str2double(size_str(size_str_sp(2)+1:end))];
         
         Settings_Cor.RealBG=get(h_check_realbg,'value');
         
@@ -375,8 +391,8 @@ uiwait(f,300);
         h_raw.Units='pix'; axis(h_raw,'equal'); axis(h_raw,'tight','xy'); h_raw.Units = 'normalized';
         h_cor.Units='pix'; axis(h_cor,'equal'); axis(h_cor,'tight','xy'); h_cor.Units = 'normalized';
         h_rad.Units='pix'; axis(h_rad,'equal'); axis(h_rad,'tight','xy'); h_rad.Units = 'normalized';
-
         caxis(h_rad,[nanmin(EBSP_single.R_EBSP(:)) nanmax(EBSP_single.R_EBSP(:))])
+
         hold(h_rad,'on');
         
         delete(s_rad);
@@ -397,7 +413,8 @@ uiwait(f,300);
         h_cor.Units='pix'; axis(h_cor,'equal'); axis(h_cor,'tight'); h_cor.Units = 'normalized';
         h_rad.Units='pix'; axis(h_rad,'equal'); axis(h_rad,'tight'); h_rad.Units = 'normalized';
         ylim(h_rad,[EBSP_single.R_rho(1) EBSP_single.R_rho(end)]);
-        
+        axis(h_rad,'square') %make the radon square looking
+
         guidata(f);
     end
 
@@ -425,6 +442,10 @@ uiwait(f,300);
         close(gcf)
     end
 function Index_Pat(source,eventdata)
+        
+        Update_PC
+        Update_BG
+        Update_Radon
         
         set(h_pc_index,'Enable','off');
         drawnow();
@@ -596,7 +617,8 @@ end
         h_raw.Units='pix'; axis(h_raw,'equal'); axis(h_raw,'tight'); h_raw.Units = 'normalized';
         h_cor.Units='pix'; axis(h_cor,'equal'); axis(h_cor,'tight'); h_cor.Units = 'normalized';
         h_rad.Units='pix'; axis(h_rad,'equal'); axis(h_rad,'tight'); h_rad.Units = 'normalized';
-        
+        axis(h_rad,'square') %make the radon square looking
+
         guidata(f);
     end
 

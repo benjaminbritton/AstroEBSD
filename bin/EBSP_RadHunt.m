@@ -23,7 +23,7 @@ function [ Peak_Centre,Peak_Quality,Peak_Set,R_EBSP,R_Edge,R_RHO,R_theta ] = EBS
 %transform
 R_theta=Settings_Rad.theta_range(1):Settings_Rad.theta_range(3):Settings_Rad.theta_range(2);
 [R_EBSP,R_RHO]=radon(EBSP,R_theta);
-[R_EBSP_b,R_RHO]=radon(EBSP*0+1,R_theta);
+[R_EBSP_b,R_RHO]=radon(EBSP*0+1,R_theta); %creates the zero mask
 R_EBSP=R_EBSP./R_EBSP_b;
 %remove the areas outside the mask
 R_EBSP(R_EBSP==0)=NaN;
@@ -52,7 +52,8 @@ Peak_H1=zeros(Settings_Rad.num_peak,1);
 Peak_H2=Peak_H1;
 
 %downscale factor for peaks
-dfac=1E-9;
+% dfac=1E-9;
+dfac=0;
 
 Pat_RadSob=R_Edge;
 x_size=size(R_Edge,2);
@@ -99,40 +100,40 @@ end
 %eR_XPort the peaks found
 Peak_Set=[R_theta(Peak_X1).',R_RHO(Peak_Y1),Peak_H1,R_theta(Peak_X2).',R_RHO(Peak_Y2),Peak_H2];
 
+%remove the duplicates
+[~,Peak_Unique,~]=unique(round(Peak_Set(:,1:2)*1000)/1000,'rows');
+Peak_Set=Peak_Set(Peak_Unique,:);
+
 Peak_Centre=[Peak_Set(:,1)+Peak_Set(:,4),Peak_Set(:,2)+Peak_Set(:,5)]./2;
 Peak_Width=Peak_Set(:,2)-Peak_Set(:,5);
 
 Peak_Ok=find(Peak_Centre(:,1) >= -2 & Peak_Centre(:,1) <= 180 & Peak_Width > Settings_Rad.min_peak_width*R_RHO_num);
 
-%cull the extra peaks
-if size(Peak_Ok,1) > Settings_Rad.max_peaks
-    Peak_Ok=Peak_Ok(1:Settings_Rad.max_peaks);
-end
-
 Peak_Centre=Peak_Centre(Peak_Ok,:); %remove the repeats
 Peak_Set=Peak_Set(Peak_Ok,:); %remove the repeats
 
-%find the peak height for the nearest pixel value of this
-npeak=size(Peak_Set,1);
-pheight=zeros(npeak,1);
+Peak_cx=round(Peak_Centre(:,1)./Settings_Rad.theta_range(3))+Settings_Rad.theta_range(1)+1;
+Peak_cy=round(Peak_Centre(:,2))+floor(size(R_RHO,1)/2)+1;
+pheight=zeros(size(Peak_cx,1),1);
 
-for n=1:npeak
-    [~,Peak_cx]=min(abs(Peak_Centre(n,1)-R_theta));
-    [~,Peak_cy]=min(abs(Peak_Centre(n,2)-R_RHO));
-    pheight(n)=R_EBSP(Peak_cy,Peak_cx);
+
+for n=1:size(Peak_cx)
+    pheight(n)=R_EBSP(Peak_cy(n),Peak_cx(n));
 end
 
-% Peak_cx=round(Peak_Centre(:,1)./Settings_Rad.theta_range(3))+Settings_Rad.theta_range(1)+1;
-% Peak_cy=round(Peak_Centre(:,2))+floor(size(R_RHO,1)/2)+1;
-% 
-% 
-% 
-% for n=1:size(Peak_cx)
-%     pheight(n)=R_EBSP(Peak_cy(n),Peak_cx(n));
-% end
-    
-%Image quality metric (band sharpness, adapted from Kunze 1993)
+%pick peaks of highest BC
 edge_height= Peak_Set(:,3)-Peak_Set(:,6);
+[~,ix]=sort(edge_height,'descend');
+ix=ix(1:Settings_Rad.max_peaks);
+
+%select only sharp bands
+edge_height=edge_height(ix);
+pheight=pheight(ix);
+Peak_Centre=Peak_Centre(ix,:);
+Peak_Set=Peak_Set(ix,:);
+
+
+%Image quality metric (band sharpness, adapted from Kunze 1993)
 edges=(nansum(edge_height)/numel(edge_height))/nanstd(R_Edge(:));
 Peak_Quality=[mean(pheight) edges];
 

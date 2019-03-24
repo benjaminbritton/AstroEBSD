@@ -1,5 +1,9 @@
 function EBSP_OneFigure=Plot_SinglePattern(EBSP_One,Crystal_UCell,Crystal_LUT,Num_Phase)
 
+if isfield(EBSP_One,'PatternCor') == 0
+    EBSP_One.PatternCor=EBSP_One.PatternIn;
+end
+
 PlotSet.Grid=[2 2];
 psize=[PlotSet.Grid(1)*3/5*10,PlotSet.Grid(2)*10];
 EBSP_OneFigure.figure=figure('PaperSize',psize*3/4,'Name','Single Pattern Data','Clipping','off','Visible','off');
@@ -7,7 +11,7 @@ set(gcf,'Units','centimeters','Position',[5   3   30    18]);
 
 EBSP_OneFigure.s1(1)=subplot(2,2,1);
 imagesc(EBSP_One.PatternIn); axis equal; colormap('gray'); axis xy; axis equal; axis tight;
-title('Raw Input');
+title('Input');
 
 EBSP_OneFigure.s1(2)=subplot(2,2,2);
 imagesc(EBSP_One.R_theta,EBSP_One.R_rho,EBSP_One.R_EBSP); colormap('gray'); axis xy; axis equal; axis tight;

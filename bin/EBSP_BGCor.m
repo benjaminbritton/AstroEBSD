@@ -1,6 +1,6 @@
-function [ EBSP2,outputs ] = EBSP_BGCor( EBSP,Settings_Cor )
+function [ EBSP2,Settings_Cor_out] = EBSP_BGCor( EBSP,Settings_Cor )
 %EBSP_BGCOR Background correct the EBSP
-%Use as [ EBSP2,outputs ] = EBSP_BGCor( EBSP,Settings_Cor )
+%Use as [ EBSP2,Settings_Cor ] = EBSP_BGCor( EBSP,Settings_Cor )
 %Inputs
 %EBSP - array that contains the EBSP
 %Settings_Cor - structure that contains information
@@ -29,16 +29,18 @@ function [ EBSP2,outputs ] = EBSP_BGCor( EBSP,Settings_Cor )
 % 
 % Settings_Cor.SquareCrop=1; %crop to a square
 %
-%OUTPUTS
+%Settings_Cor
 %   EBSP2 = corrected ESBP array (as double)
-%   outputs = information from corrections as a structure
+%   Settings_Cor = information from corrections as a structure
 %
 
 %% Versioning
 %v1 - TBB 14/04/2017
 
 %% Start Code
-outputs=struct;
+if isempty(Settings_Cor)
+    Settings_Cor=struct;
+end
 
 EBSP2=EBSP;
 
@@ -61,12 +63,24 @@ if ~isfield(Settings_Cor,'gaussfit')
     Settings_Cor.gaussfit=0;
 end
 
+if ~isfield(Settings_Cor,'hot_thresh')
+    Settings_Cor.hot_thresh=0;
+end
+
+if ~isfield(Settings_Cor,'gfilt_s')
+    Settings_Cor.gfilt_s=0;
+end
+
 if ~isfield(Settings_Cor,'blur')
     Settings_Cor.blur=0;
 end
 
 if ~isfield(Settings_Cor,'RealBG')
     Settings_Cor.RealBG=0;
+end
+
+if ~isfield(Settings_Cor,'radius_frac')
+    Settings_Cor.radius_frac=1;
 end
 
 if ~isfield(Settings_Cor,'radius')
@@ -112,7 +126,7 @@ end
 
 %cor the pattern for hot pixels
 if Settings_Cor.hotpixel == 1
-    [EBSP2,outputs.hotpixl_num]=cor_hotpix(EBSP2,Settings_Cor.hot_thresh);
+    [EBSP2,Settings_Cor.hotpixl_num]=cor_hotpix(EBSP2,Settings_Cor.hot_thresh);
 end
 
 if Settings_Cor.RealBG == 1
@@ -140,20 +154,20 @@ EBSP2=fix_mean(EBSP2);
 %resize the image
 if Settings_Cor.resize == 1
     cs=floor([Settings_Cor.size Settings_Cor.size*size(EBSP2,2)/size(EBSP2,1)]);
-    EBSP2 = imresize(EBSP2,cs);
+    EBSP2 = imresize(EBSP2,cs(1:2));
 else
     cs=size(EBSP2);
 end
-outputs.size=cs;
+Settings_Cor.size=cs;
 
 if Settings_Cor.Square == 1
     %square crop on minimum dimension
-    ms=min(outputs.size);
-    cv=floor(outputs.size/2);
+    ms=min(Settings_Cor.size);
+    cv=floor(Settings_Cor.size/2);
     stepv=(1:ms)-floor(ms/2);
     EBSP2=EBSP2(cv(1)+stepv,cv(2)+stepv);
     cs=size(EBSP2);
-    outputs.size=cs;
+    Settings_Cor.size=cs;
 end
 
 
@@ -168,7 +182,7 @@ if Settings_Cor.gaussfit == 1
     
     EBSPData.PW=size(EBSP2,2);
     EBSPData.PH=size(EBSP2,1);
-    [bg2,outputs.gaussparams]=bg_fit(EBSP2,EBSPData);
+    [bg2,Settings_Cor.gaussparams]=bg_fit(EBSP2,EBSPData);
     EBSP2=EBSP2./bg2;
     EBSP2=fix_mean(EBSP2);
 end
@@ -202,6 +216,8 @@ if Settings_Cor.TKDBlur2 == 1
     end
 %     EBSP2=fix_mean(EBSP2);
 end
+
+Settings_Cor_out=Settings_Cor;
 end
 
 function [EBSP2,num_hot]=cor_hotpix(EBSP,hthresh)

@@ -4,7 +4,7 @@ home
 close all
 
 %load key folders into the path
-Astro_FP= 'C:\Users\tbritton\Documents\GitHub\AstroEBSD'; %please change this to your astro file path
+Astro_FP= 'C:\Users\bbrit\Documents\GitHub\AstroEBSD'; %please change this to your astro file path
 
 InputUser.Mode = 'Isolated'; %modes = 
                              %Isolated = single file 
@@ -79,10 +79,3 @@ Astro_Run;
 
 %plot data
 Astro_Plot;
-
-%% Index the pattern
-box_size=21;
-
-peak_centre=EBSP_One.Peak_Centre;
-pattern_info=EBSP_One.PatternInfo.size;
-
