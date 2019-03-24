@@ -24,6 +24,7 @@ Peak_Quality=zeros(AreaData.max_pats,2);
 Peak_Centres=zeros(Settings_Rad.max_peaks,2,AreaData.max_pats);
 Peak_NBands=zeros(AreaData.max_pats,1);
 
+%adjust to 'for' if needed (i.e. no Parallel Compute Toolbox)
 parfor n=1:AreaData.max_pats
     %read pattern & correct
     pattern2 = bReadEBSP(EBSPData,n);

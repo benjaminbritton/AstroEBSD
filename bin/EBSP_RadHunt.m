@@ -112,19 +112,23 @@ Peak_Ok=find(Peak_Centre(:,1) >= -2 & Peak_Centre(:,1) <= 180 & Peak_Width > Set
 Peak_Centre=Peak_Centre(Peak_Ok,:); %remove the repeats
 Peak_Set=Peak_Set(Peak_Ok,:); %remove the repeats
 
-Peak_cx=round(Peak_Centre(:,1)./Settings_Rad.theta_range(3))+Settings_Rad.theta_range(1)+1;
-Peak_cy=round(Peak_Centre(:,2))+floor(size(R_RHO,1)/2)+1;
-pheight=zeros(size(Peak_cx,1),1);
+%need the index for each peak centre to get the peak height
+%Peak_Centre(:,1) %thetas
+%Peak_Centre(:,2) %rhos
 
-
-for n=1:size(Peak_cx)
-    pheight(n)=R_EBSP(Peak_cy(n),Peak_cx(n));
-end
+%extract the peak centres
+[~,itheta]=min(abs(repmat(Peak_Centre(:,1),1,numel(R_theta))-repmat(R_theta,numel(Peak_Centre(:,1)),1)),[],2);
+[~,irho]  =min(abs(repmat(Peak_Centre(:,2),1,numel(R_RHO))-repmat(R_RHO',numel(Peak_Centre(:,2)),1)),[],2);
+ilist=sub2ind(size(R_EBSP),irho,itheta);
+pheight=R_EBSP(ilist);
 
 %pick peaks of highest BC
 edge_height= Peak_Set(:,3)-Peak_Set(:,6);
 [~,ix]=sort(edge_height,'descend');
-ix=ix(1:Settings_Rad.max_peaks);
+
+max_peaks=min([Settings_Rad.max_peaks numel(ix)]);
+
+ix=ix(1:max_peaks);
 
 %select only sharp bands
 edge_height=edge_height(ix);
