@@ -2,6 +2,20 @@ clear
 home 
 close all
 
+% Demonstration code for AstroEBSD for use at the 2019 RMS EBSD workshop
+% CC-BY license https://creativecommons.org/licenses/by/4.0/
+% created by Ben Britton and Alex Foden
+% 
+% This code is best run 'step size' using 'run and advance'
+%
+% Ideally matlab 2018b+
+% Requires installation of:
+% global optimisation toolbox (for pattern centre searching)
+% parallel computing toolbox (to speed up indexing of the map data)
+%
+% The Iron data set can be found here:
+% https://doi.org/10.5281/zenodo.2609221
+
 %% Toolbox locations for AstroEBSD and MTEX
 location_astro='C:\Users\bbrit\Documents\GitHub\AstroEBSD\'; %Change this to your AstroEBSD location
 location_mtex='C:\Users\bbrit\Documents\GitHub\mtex'; %Change this to where you keep your MTEX folder
@@ -36,13 +50,14 @@ Settings_Rad.min_peak_width=0.002; %min rseperation of the peak width, in pixels
 %% Load in the GUI
 %play with the GUI
 %Close the GUI to have the code continue automatically
-Settings_PCin.start=[0.5,0.3,0.6];
+Settings_PCin.start=[0.5,0.3,0.6]; %[PCx, PCy, PCz] using Bruker conventions
+
 Astro_EBSPset(EBSP_One,Settings_Cor,Settings_Rad,Settings_PCin,InputUser);
 
 %% Do the indexing offline
 
 %This is the example
-EBSP_One.PC=[0.5,0.3,0.6]; %known
+EBSP_One.PC=[0.5,0.3,0.6]; %[PCx, PCy, PCz] using Bruker conventions
 
 %Radon transform
 [ EBSP_One.Peak_Centre,EBSP_One.Single.Peak_Set_All,EBSP_One.Peak_Set_All,...
@@ -89,6 +104,11 @@ Settings_Cor_Fe.SplitBG=1;
 EBSP_all=zeros([size(EBSP_FeR) MicroscopeData.NPoints]); 
 for p=1:MicroscopeData.NPoints 
     [ EBSP_all(:,:,p) ] = bReadEBSP(EBSPData,p); %This can take a minute or two so be patient if it doesn't seem to work straighht away
+    
+    %provide some feedback
+    if 1000*round(p/1000) == p
+        disp(['Pattern ' int2str(p) ' of ' int2str(MicroscopeData.NPoints) ' patterns corrected']);
+    end
 end
 
 %% Now we can start playing
@@ -120,13 +140,13 @@ EBSP_sumB=zeros(MicroscopeData.NPoints,1);
 
 %sum three horizontal strips from the EBSP
 for p=1:MicroscopeData.NPoints
-    EBSP_sumR(p)=sum(EBSP_all(1:25,:,p),'all'); 
-    EBSP_sumG(p)=sum(EBSP_all(25:50,:,p),'all');
-    EBSP_sumB(p)=sum(EBSP_all(51:75,:,p),'all'); 
+    EBSP_sumR(p)=sum(EBSP_all(:,1:33,p),'all'); 
+    EBSP_sumG(p)=sum(EBSP_all(:,34:66,p),'all');
+    EBSP_sumB(p)=sum(EBSP_all(:,66:100,p),'all'); 
 
-%     EBSP_sumR(p)=sum(sum(EBSP_all(1:25,:,p))); %There are two versions of this because of the same versioning issue earlier
-%     EBSP_sumG(p)=sum(sum(EBSP_all(25:50,:,p)));
-%     EBSP_sumB(p)=sum(sum(EBSP_all(51:75,:,p))); 
+%     EBSP_sumR(p)=sum(sum(EBSP_all(:,1:33,p))); %There are two versions of this because of the same versioning issue earlier
+%     EBSP_sumG(p)=sum(sum(EBSP_all(:,34:66,p)));
+%     EBSP_sumB(p)=sum(sum(EBSP_all(:,66:100,p))); 
 end
 
 %convert into maps
@@ -160,7 +180,6 @@ figure;
 sp1=subplot(1,1,1); %creates an axis
 image(Map_XSample(1,:),Map_YSample(:,1)',Map_EBSP_sum_RGB); axis image;
 axis image; axis tight;  axis ij; sp1.XDir='reverse'; %sets the axis to how they are expected
-
 
 %% Now process the patterns
 EBSP_BG=zeros([size(EBSP_FeR) MicroscopeData.NPoints]);
@@ -371,12 +390,12 @@ h5_WritePair(OutputUser.HDF5FullFile,OutputUser.DataName,htype,'Magnification',M
 h5_WritePair(OutputUser.HDF5FullFile,OutputUser.DataName,htype,'WD',MicroscopeData.WD); %write the data
 
 %% Create stuff in MTEX
-cs = loadCIF('Fe-Iron-alpha.cif');
-setMTEXpref('xAxisDirection','west');
-setMTEXpref('zAxisDirection','outOfPlane');
+cs = loadCIF('Fe-Iron-alpha.cif'); %load the CIF file from MTEX cifs
+setMTEXpref('xAxisDirection','west'); %set the axes conventions 
+setMTEXpref('zAxisDirection','outOfPlane'); %z is out of the page
 
 % build the coordinate maps
-prop.x = double(MapData.XSample); %have to transpose - not sure why...
+prop.x = double(MapData.XSample);
 prop.y = double(MapData.YSample);
 ori = ...
   rotation('Euler',Astro_Phi1*degree,Astro_PHI*degree,Astro_Phi2*degree);
@@ -390,8 +409,8 @@ color = colorKey.orientation2color(ebsd('indexed').orientations);
 
 plot(ebsd,colorKey.orientation2color(ebsd.orientations))
 
-% Plot an orientation color key, this will cause an error and break the
-% codes, so only plot it if needed
+% % If needed, plot an orientation color key,
 % figure;
 % plot(colorKey)
 
+%end of script
