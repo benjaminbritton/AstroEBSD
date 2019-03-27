@@ -3,8 +3,8 @@ home
 close all
 
 %% Toolbox locations for AstroEBSD and MTEX
-location_astro='C:\Users\bbrit\Documents\GitHub\AstroEBSD\';
-location_mtex='C:\Users\bbrit\Documents\GitHub\mtex';
+location_astro='C:\Users\af2416\Documents\GitHub\AstroEBSD\';
+location_mtex='C:\Users\af2416\Desktop\mtex-5.2.beta2';
 
 %% run Astro and EBSD to start
 run(fullfile(location_astro,'start_AstroEBSD.m'));
@@ -55,7 +55,8 @@ EBSP_One.PC=[0.5,0.3,0.6]; %known
 [EBSP_One.rotdata,EBSP_One.banddata]=EBSP_Index(EBSP_One.nhat_gnom,Crystal_LUT{1},Settings_LUT{1}.thresh_trig,Crystal_UCell{1},eye(3)); %#ok<PFBNS>
 
 %% Now read a H5 file
-InputUser.HDF5_folder='C:\Users\bbrit\Documents\EBSD';
+% InputUser.HDF5_folder='C:\Users\bbrit\Documents\EBSD';
+InputUser.HDF5_folder='V:\Example_Data';
 InputUser.HDF5_file='Demo_Ben_16bin.h5';
 InputUser.Phase_Input  = {'Ferrite'};
 Settings_PCin.start=[0.5010 0.4510 0.5870]; %Fe
