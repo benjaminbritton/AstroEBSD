@@ -16,3 +16,9 @@ $EFac
 100
 $PlaneReflector
 0,-2,2;0,4,0;1,-3,-1;2,-4,2;1,-3,-3;1,1,1;
+$cif
+Si-Silicon.cif
+$dynamic
+Si_1024
+$isHex
+0
