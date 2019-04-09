@@ -36,19 +36,29 @@ end
 
 %read the indexed data
 try
-    MapData.MAD=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name        '/EBSD/Data/MAD']);
-    MapData.MADPhase=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name   '/EBSD/Data/MADPhase']);
-    MapData.NIndexedBands=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name        '/EBSD/Data/NIndexedBands']);
     MapData.PHI=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name        '/EBSD/Data/PHI']);
     MapData.phi2=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name       '/EBSD/Data/phi2']);
     MapData.phi1=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name       '/EBSD/Data/phi1']);
-    MapData.RadonQuality=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name '/EBSD/Data/RadonQuality']);
+   catch
+    warning('Orientation data loading');
+end 
 
+%read the associated data
+try
+    MapData.MAD=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name        '/EBSD/Data/MAD']);
+    MapData.MADPhase=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name   '/EBSD/Data/MADPhase']);
+    MapData.NIndexedBands=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name        '/EBSD/Data/NIndexedBands']);
+    MapData.RadonQuality=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name '/EBSD/Data/RadonQuality']);
     MicroscopeData.MaxRadonBandCount=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EBSD/Header/MaxRadonBandCount']);
     MicroscopeData.MADMax=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EBSD/Header/MADMax']);
-
 catch
     warning('Indexing of patterns not loaded')
+end
+
+try
+    MapData.PeakHeight=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name         '/EBSD/Data/PeakHeight']);
+catch
+    warning('PeakHeight data not loaded');
 end
 
 %read the beam data
@@ -131,6 +141,7 @@ catch
 end
     MicroscopeData.CoordSystems='TRZP'; %Top Right Z Plus - standard for Bruker Coords - is used in EBSD_Map
 
+    
 
 %read the phase info
 try
