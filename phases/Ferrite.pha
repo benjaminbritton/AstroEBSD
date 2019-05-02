@@ -14,3 +14,9 @@ $MaxIndex
 10
 $EFac
 100
+$cif
+Fe-Iron-alpha.cif
+$dynamic
+Ferrite_1024
+$isHex
+0

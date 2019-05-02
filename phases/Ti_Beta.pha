@@ -16,3 +16,9 @@ $EFac
 100
 $PlaneReflector
 0,2,0;1,2,1;0,3,1;2,0,2;
+$cif
+Ti-Titanium-beta.cif
+$dynamic
+Titanium_beta
+$isHex
+0
