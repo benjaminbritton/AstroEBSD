@@ -3,15 +3,20 @@ home
 close all
 
 %% Toolbox locations for AstroEBSD and MTEX
+<<<<<<< HEAD
 location_astro='C:\Users\af2416\Documents\GitHub\AstroEBSD\';
 location_mtex='C:\Users\af2416\Desktop\mtex-5.2.beta2';
+=======
+location_astro='C:\Users\bbrit\Documents\GitHub\AstroEBSD\'; %Change this to your AstroEBSD location
+location_mtex='C:\Users\bbrit\Documents\GitHub\mtex'; %Change this to where you keep your MTEX folder
+>>>>>>> 34977a08c13fc4952d09febcda2f6c6df3c69300
 
 %% run Astro and EBSD to start
 run(fullfile(location_astro,'start_AstroEBSD.m'));
 run(fullfile(location_mtex,'startup_mtex.m'));
 
 %% Analyse a single pattern
-pattern1=flipud(double(imread('pattern1.tif')));
+pattern1=flipud(double(imread('pattern1.tif'))); %Make sure pattern1.tif is saved in your current working directory
 
 % Normalise intensities
 [EBSP_One.PatternIn,Settings_Cor ] = EBSP_BGCor( pattern1,[]);
@@ -35,6 +40,7 @@ Settings_Rad.min_peak_width=0.002; %min rseperation of the peak width, in pixels
 
 %% Load in the GUI
 %play with the GUI
+%Close the GUI to have the code continue automatically
 Settings_PCin.start=[0.5,0.3,0.6];
 Astro_EBSPset(EBSP_One,Settings_Cor,Settings_Rad,Settings_PCin,InputUser);
 
@@ -55,8 +61,12 @@ EBSP_One.PC=[0.5,0.3,0.6]; %known
 [EBSP_One.rotdata,EBSP_One.banddata]=EBSP_Index(EBSP_One.nhat_gnom,Crystal_LUT{1},Settings_LUT{1}.thresh_trig,Crystal_UCell{1},eye(3)); %#ok<PFBNS>
 
 %% Now read a H5 file
+<<<<<<< HEAD
 % InputUser.HDF5_folder='C:\Users\bbrit\Documents\EBSD';
 InputUser.HDF5_folder='V:\Example_Data';
+=======
+InputUser.HDF5_folder='C:\Users\bbrit\Documents\EBSD'; %Change this to the file location in whch you have saved the example data
+>>>>>>> 34977a08c13fc4952d09febcda2f6c6df3c69300
 InputUser.HDF5_file='Demo_Ben_16bin.h5';
 InputUser.Phase_Input  = {'Ferrite'};
 Settings_PCin.start=[0.5010 0.4510 0.5870]; %Fe
@@ -86,15 +96,16 @@ Settings_Cor_Fe.SplitBG=1;
 
 %% Read the EBSD patterns into the RAM - this takes 0.5GB of RAM, but makes every thing else easier
 
-EBSP_all=zeros([size(EBSP_FeR) MicroscopeData.NPoints]);
-for p=1:MicroscopeData.NPoints
-    [ EBSP_all(:,:,p) ] = bReadEBSP(EBSPData,p);
+EBSP_all=zeros([size(EBSP_FeR) MicroscopeData.NPoints]); 
+for p=1:MicroscopeData.NPoints 
+    [ EBSP_all(:,:,p) ] = bReadEBSP(EBSPData,p); %This can take a minute or two so be patient if it doesn't seem to work straighht away
 end
 
 %% Now we can start playing
 EBSP_sum=zeros(MicroscopeData.NPoints,1);
 for p=1:MicroscopeData.NPoints
     EBSP_sum(p)=sum(EBSP_all(:,:,p),'all');
+% EBSP_sum(p)=sum(sum(EBSP_all(:,:,p))); % There are two versions of this here because of a bug fix, R2018b onwards can use the first verion, earlier versions need the second
 end
 
 %sort this into a 2D Map
@@ -104,14 +115,14 @@ end
 Map_XSample=bMapSort(MapData,MicroscopeData,MapData.XSample);
 Map_YSample=bMapSort(MapData,MicroscopeData,MapData.YSample);
 
-%plot the map
+%plot the secondary electron map
 figure;
 sp1=subplot(1,1,1); %creates an axis
 imagesc(Map_XSample(1,:),Map_YSample(:,1)',Map_EBSP_sum); %plots the data
 axis image; axis tight; colormap('gray'); axis ij; sp1.XDir='reverse'; %sets the axis to how they are expected
 
 
-%% EBSP_sum=zeros(MicroscopeData.NPoints,1);
+%% plot a dummy argus image
 %create zeros
 EBSP_sumR=zeros(MicroscopeData.NPoints,1);
 EBSP_sumG=zeros(MicroscopeData.NPoints,1);
@@ -119,9 +130,13 @@ EBSP_sumB=zeros(MicroscopeData.NPoints,1);
 
 %sum three horizontal strips from the EBSP
 for p=1:MicroscopeData.NPoints
-    EBSP_sumR(p)=sum(EBSP_all(1:25,:,p),'all');
+    EBSP_sumR(p)=sum(EBSP_all(1:25,:,p),'all'); 
     EBSP_sumG(p)=sum(EBSP_all(25:50,:,p),'all');
     EBSP_sumB(p)=sum(EBSP_all(51:75,:,p),'all'); 
+
+%     EBSP_sumR(p)=sum(sum(EBSP_all(1:25,:,p))); %There are two versions of this because of the same versioning issue earlier
+%     EBSP_sumG(p)=sum(sum(EBSP_all(25:50,:,p)));
+%     EBSP_sumB(p)=sum(sum(EBSP_all(51:75,:,p))); 
 end
 
 %convert into maps
@@ -161,7 +176,7 @@ axis image; axis tight;  axis ij; sp1.XDir='reverse'; %sets the axis to how they
 EBSP_BG=zeros([size(EBSP_FeR) MicroscopeData.NPoints]);
 
 for p=1:MicroscopeData.NPoints
-    [EBSP_BG(:,:,p),~ ] = EBSP_BGCor( EBSP_all(:,:,p),Settings_Cor);
+    [EBSP_BG(:,:,p),~ ] = EBSP_BGCor( EBSP_all(:,:,p),Settings_Cor); %Background correct the patterns
     
         %provide some feedback
     if 1000*round(p/1000) == p
@@ -254,6 +269,9 @@ rot_det=R_x(MicroscopeData.TotalTilt);
 EBSP_OneFigure=Plot_SinglePattern(EBSP_Fe_One,Crystal_UCell,Crystal_LUT,1);
 
 %% Find the pattern centre for one pattern
+%For this to work you need to have the optimization and global optimization
+%toolboxes installed
+
 EBSP_Fe_PC.PatternIn=EBSP_Fe_One.PatternIn;
 
 %copy over the PC found earlier
@@ -381,4 +399,9 @@ colorKey.inversePoleFigureDirection = xvector;
 color = colorKey.orientation2color(ebsd('indexed').orientations);
 
 plot(ebsd,colorKey.orientation2color(ebsd.orientations))
+
+% Plot an orientation color key, this will cause an error and break the
+% codes, so only plot it if needed
+% figure;
+% plot(colorKey)
 
