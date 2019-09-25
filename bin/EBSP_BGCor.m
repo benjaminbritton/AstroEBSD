@@ -106,6 +106,10 @@ end
 if ~isfield(Settings_Cor,'TKDBlur2')
     Settings_Cor.TKDBlur2=0;
 end
+
+if ~isfield(Settings_Cor,'LineError')
+   Settings_Cor.LineError=0; 
+end
 %% Start the corrections
 
 if Settings_Cor.SquareCrop == 1 %crop the image to a square
@@ -147,6 +151,19 @@ if Settings_Cor.SplitBG == 1
    
 end
 
+if Settings_Cor.LineError==1
+    
+    meanval=mean(mean(EBSP2));
+    patstd=mean(std(EBSP2));
+    
+    loc1=floor(0.9667*size(EBSP,1));
+    loc2=ceil(0.98*size(EBSP,1));
+    
+    for i=loc1:loc2
+        line=rand([1,150]);
+        EBSP2(i,:)=meanval+line.*(3*patstd)-3*patstd./2;
+    end
+end
 
 %fix the mean and std
 EBSP2=fix_mean(EBSP2);
