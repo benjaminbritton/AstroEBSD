@@ -6,7 +6,7 @@ cset=[1,0,0;
     0,0,1;
     0,1,1;
     1,0,1;
-    0,1,1];
+    1,1,0];
 cset=[cset;cset*0.5];
 
 U.K         =   Crystal_UCell.At*RotMat;
