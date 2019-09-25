@@ -112,8 +112,8 @@ if Settings_Cor.SquareCrop == 1 %crop the image to a square
     EBSP_size=min(size(EBSP2));
     crop.centre = [size(EBSP2, 2)/2 size(EBSP2, 1)/2];
     s=1:EBSP_size; s=s-mean(s);
-    sy=s+crop.centre(2)+0.5;
-    sx=s+crop.centre(1)+0.5;
+    sy=floor(s+crop.centre(2)+0.5);
+    sx=floor(s+crop.centre(1)+0.5);
     EBSP2=EBSP2(sy,sx);
 end
 
