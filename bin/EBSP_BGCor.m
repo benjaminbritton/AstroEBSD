@@ -110,6 +110,11 @@ end
 if ~isfield(Settings_Cor,'LineError')
    Settings_Cor.LineError=0; 
 end
+
+if ~isfield(Settings_Cor,'MeanCentre')
+   Settings_Cor.LineError=0; 
+end
+
 %% Start the corrections
 
 if Settings_Cor.SquareCrop == 1 %crop the image to a square
@@ -126,11 +131,6 @@ if Settings_Cor.SatCor == 1 %saturation correction
     I_noise=mean(EBSP2(:))+std(EBSP2(:))*I_noise;
     mvals=find(EBSP2 == max(EBSP2(:)));
     EBSP2(mvals)=I_noise(mvals);
-end
-
-%cor the pattern for hot pixels
-if Settings_Cor.hotpixel == 1
-    [EBSP2,Settings_Cor.hotpixl_num]=cor_hotpix(EBSP2,Settings_Cor.hot_thresh);
 end
 
 if Settings_Cor.RealBG == 1
@@ -150,6 +150,12 @@ if Settings_Cor.SplitBG == 1
     EBSP2=[EBSP2a./EBSP2a_g EBSP2b./EBSP2b_g];
    
 end
+
+%cor the pattern for hot pixels
+if Settings_Cor.hotpixel == 1
+    [EBSP2,Settings_Cor.hotpixl_num]=cor_hotpix(EBSP2,Settings_Cor.hot_thresh);
+end
+
 
 if Settings_Cor.LineError==1
     
@@ -234,8 +240,14 @@ if Settings_Cor.TKDBlur2 == 1
 %     EBSP2=fix_mean(EBSP2);
 end
 
+if Settings_Cor.MeanCentre==1
+    %taken from fix fixmean function, without the make positive part
+    EBSP2=(EBSP2-mean(EBSP2(:)))/std(EBSP2(:));
+end
+
 Settings_Cor_out=Settings_Cor;
 end
+
 
 function [EBSP2,num_hot]=cor_hotpix(EBSP,hthresh)
 
