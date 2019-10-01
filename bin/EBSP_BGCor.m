@@ -159,14 +159,14 @@ end
 
 if Settings_Cor.LineError==1
     
-    meanval=mean(mean(EBSP2));
-    patstd=mean(std(EBSP2));
+    meanval=mean(EBSP2(:));
+    patstd=std(EBSP2(:));
     
     loc1=floor(0.9667*size(EBSP,1));
     loc2=ceil(0.98*size(EBSP,1));
     
     for i=loc1:loc2
-        line=rand([1,150]);
+        line=rand([1,EBSP_size]);
         EBSP2(i,:)=meanval+line.*(3*patstd)-3*patstd./2;
     end
 end
