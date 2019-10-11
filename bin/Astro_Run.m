@@ -157,6 +157,11 @@ try
             EBSP_One.PC(3)=PCOut.Fit_2nd.PCz_map(InputUser.OnePatternPosition(2),InputUser.OnePatternPosition(1));
             
         end
+        
+        if isfield(EBSP_One,'PC') == 0
+            EBSP_One.PC = Settings_PCin.start;
+        end
+        
             % Convert the bands to normal space
             [ EBSP_One.nhat_gnom] = EBSP_NormConv( EBSP_One.Peak_Centre,[EBSP_One.PatternInfo.size],EBSP_One.PC);
             
