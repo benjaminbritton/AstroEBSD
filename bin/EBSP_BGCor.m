@@ -47,6 +47,11 @@ EBSP2=EBSP;
 %check fields exist & create if needed - this is ordered in the order of
 %operations to aid with debugging & adding new correction routines 
 %as needed
+
+if ~isfield(Settings_Cor,'MeanCentre')
+    Settings_Cor.MeanCentre=0;
+end
+
 if ~isfield(Settings_Cor,'SquareCrop')
     Settings_Cor.SquareCrop=0;
 end
