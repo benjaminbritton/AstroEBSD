@@ -381,7 +381,7 @@ prop.y = double(MapData.YSample);
 ori = ...
   rotation('Euler',Astro_Phi1*degree,Astro_PHI*degree,Astro_Phi2*degree);
 
-ebsd = EBSD(ori.', ones(size(ori)),{'notIndexed',cs},'options',prop);
+ebsd = EBSD(ori.', ones(size(ori)),{'notIndexed',cs},prop);
 
 figure;
 colorKey = ipfHSVKey(cs);
