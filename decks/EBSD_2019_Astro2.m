@@ -2,6 +2,13 @@ clear
 home 
 close all
 
+% This script was created to kick off discussions at the 2019 EBSD meeting
+% and it contains basic functionality that may be useful within the
+% AstroEBSD toolbox
+%
+% You can fetch the demo h5 data set from https://doi.org/10.5281/zenodo.2609220
+
+
 %% Toolbox locations for AstroEBSD and MTEX
 location_astro='C:\Users\bbrit\Documents\GitHub\AstroEBSD\'; %Change this to your AstroEBSD location
 location_mtex='C:\Users\bbrit\Documents\GitHub\mtex'; %Change this to where you keep your MTEX folder
@@ -56,7 +63,7 @@ EBSP_One.PC=[0.5,0.3,0.6]; %known
 [EBSP_One.rotdata,EBSP_One.banddata]=EBSP_Index(EBSP_One.nhat_gnom,Crystal_LUT{1},Settings_LUT{1}.thresh_trig,Crystal_UCell{1},eye(3)); %#ok<PFBNS>
 
 %% Now read a H5 file
-InputUser.HDF5_folder='C:\Users\bbrit\Documents\EBSD'; %Change this to the file location in whch you have saved the example data
+InputUser.HDF5_folder='C:\Users\bbrit\OneDrive - Imperial College London\Documents\EBSD'; %Change this to the file location in whch you have saved the example data
 InputUser.HDF5_file='Demo_Ben_16bin.h5';
 InputUser.Phase_Input  = {'Ferrite'};
 Settings_PCin.start=[0.5010 0.4510 0.5870]; %Fe
@@ -86,10 +93,15 @@ Settings_Cor_Fe.SplitBG=1;
 
 %% Read the EBSD patterns into the RAM - this takes 0.5GB of RAM, but makes every thing else easier
 
-EBSP_all=zeros([size(EBSP_FeR) MicroscopeData.NPoints]); 
-for p=1:MicroscopeData.NPoints 
-    [ EBSP_all(:,:,p) ] = bReadEBSP(EBSPData,p); %This can take a minute or two so be patient if it doesn't seem to work straighht away
-end
+%read in serial patterns
+
+% EBSP_all=zeros([size(EBSP_FeR) MicroscopeData.NPoints]); 
+% for p=1:MicroscopeData.NPoints 
+%     [ EBSP_all(:,:,p) ] = bReadEBSP(EBSPData,p); %This can take a minute or two so be patient if it doesn't seem to work straighht away
+% end
+
+%read the whole array (beware of RAM issues)
+EBSP_all=bReadEBSP(EBSPData);
 
 %% Now we can start playing
 EBSP_sum=zeros(MicroscopeData.NPoints,1);
