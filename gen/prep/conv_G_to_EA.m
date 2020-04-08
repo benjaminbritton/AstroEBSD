@@ -14,7 +14,7 @@ function eang_out=conv_G_to_EA(g_in)
 %R_x=@(theta)[1 0 0;0 cos(theta) sin(theta);0 -sin(theta) cos(theta)];
 %R_z=@(theta)[cos(theta) sin(theta) 0;-sin(theta) cos(theta) 0;0 0 1];
 %EBSD_Rot_in=R_z(eangs_in(3))*R_x(eangs_in(2))*R_z(eangs_in(1));
-warning('There may be a bug in this Euler angle converter');
+
 num_g=size(g_in,3);
 eang_out=zeros(3,num_g);
 
