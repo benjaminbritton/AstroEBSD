@@ -42,7 +42,7 @@ AreaData.XBeam_Map=reshape(double(MapData.XBeam(ix)),[NCOLS NROWS])';
 AreaData.YBeam_Map=reshape(double(MapData.YBeam(ix)),[NCOLS NROWS])';
 AreaData.XSample=reshape(double(MapData.XSample(ix)),[NCOLS NROWS])';
 AreaData.YSample=reshape(double(MapData.YSample(ix)),[NCOLS NROWS])';
-AreaData.Phase=reshape(double(MapData.Phase(ix)),[NCOLS NROWS])';
+
 % PatList2Map=@(data,col,row)fliplr(rot90(reshape(double(data),[double(col) double(row)]),3));
 % 
 % plist=1:max_pats;
@@ -51,6 +51,12 @@ AreaData.Phase=reshape(double(MapData.Phase(ix)),[NCOLS NROWS])';
 % XBeam_Map=PatList2Map(MapData.XBeam,NCOLS,NROWS);
 % YBeam_Map=PatList2Map(MapData.YBeam,NCOLS,NROWS);
 % PMap=PatList2Map(plist,NCOLS,NROWS);
+
+try 
+    AreaData.Phase=reshape(double(MapData.Phase(ix)),[NCOLS NROWS])';
+catch
+    warning('Phase data not loaded!')
+end
 
 X_axis=AreaData.XBeam_Map(1,:); X_axis=X_axis(:);
 Y_axis=AreaData.YBeam_Map(:,1); Y_axis=Y_axis(:);

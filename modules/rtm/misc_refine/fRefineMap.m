@@ -19,6 +19,9 @@ pTime(['Set up RTM PC refinement to pattern match against ' PhaseInput],t1);
 [PatternData] = fSelectPoints(MapInfo,PhaseInput,Refine.num_pts);
 close all
 
+%tell PatternData what phase to search for for each point
+PatternData.Phase=repmat(Refine.phase,[Refine.num_pts,1]);
+
 pTime(['Optimising pattern centre for selected points'],t1);
 % Find the PC for these points
 [Best_PC,Best_PH,Best_Ori] = fPCMatchSearch(PatternData,MapInfo,Refine,RTM_info,RTM,Settings_Cor,SettingsXCF,screen_int,Detector_tilt,PatternInfo);

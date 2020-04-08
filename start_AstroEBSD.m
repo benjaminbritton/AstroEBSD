@@ -80,7 +80,7 @@ addpath([Astro_FP,link, 'modules',link,'rtm',link,'bin']);
 addpath([Astro_FP,link, 'modules',link,'rtm',link,'example_patterns']);
 addpath([Astro_FP,link, 'modules',link,'rtm',link,'logsample']);
 addpath([Astro_FP,link, 'modules',link,'rtm',link,'runRTM']);
-addpath([Astro_FP,link, 'modules',linke,'rtm',link,'misc_refine']);
+addpath([Astro_FP,link, 'modules',link,'rtm',link,'misc_refine']);
 
 addpath([Astro_FP,link, 'utils']);
 addpath([Astro_FP,link, 'phases']);
