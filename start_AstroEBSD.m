@@ -30,16 +30,18 @@ end
 %initalise folders as needed
 
 
-%read the current folder
-astroloc=strfind(local_path,'AstroEBSD');
+% %read the current folder
+% astroloc=strfind(local_path,'AstroEBSD');
+% 
+% %check that w are in a subfolder
+% if isempty(astroloc)
+%     error('Path must be run first from a subfolder of ''AstroEBSD''');
+% end
+% 
+% %get the file path
+% Astro_FP=local_path(1:astroloc+8);
 
-%check that w are in a subfolder
-if isempty(astroloc)
-    error('Path must be run first from a subfolder of ''AstroEBSD''');
-end
-
-%get the file path
-Astro_FP=local_path(1:astroloc+8);
+Astro_FP=local_path;
 
 %build folders for things if this is a first run
 if exist([Astro_FP, link,'testing'],'dir') ~= 7
@@ -53,12 +55,37 @@ if exist([Astro_FP ,link,'decks'],'dir') ~= 7
 end
 
 %build the paths
-addpath([Astro_FP,link, 'gen']);
-addpath([Astro_FP,link, 'bin']);
+addpath([Astro_FP,link, 'decks']);
+addpath([Astro_FP,link, 'decks',link,'PCA']);
+addpath([Astro_FP,link, 'decks',link,'RTM']);
+
+addpath([Astro_FP,link, 'gen',link,'loading']);
+addpath([Astro_FP,link, 'gen',link,'prep']);
+
+addpath([Astro_FP,link, 'modules',link,'indexing']);
+
+addpath([Astro_FP,link, 'modules',link,'pca']);
+addpath([Astro_FP,link, 'modules',link,'pca',link,'Analysis']);
+addpath([Astro_FP,link, 'modules',link,'pca',link,'Analysis',link,'Bruker_Spectra_Hack']);
+addpath([Astro_FP,link, 'modules',link,'pca',link,'bin']);
+addpath([Astro_FP,link, 'modules',link,'pca',link,'LoadingData']);
+addpath([Astro_FP,link, 'modules',link,'pca',link,'plugins']);
+addpath([Astro_FP,link, 'modules',link,'pca',link,'plugins',link,'cbrewer']);
+addpath([Astro_FP,link, 'modules',link,'pca',link,'plugins',link,'Colormaps']);
+addpath([Astro_FP,link, 'modules',link,'pca',link,'RunPCA']);
+
+
+addpath([Astro_FP,link, 'modules',link,'rtm']);
+addpath([Astro_FP,link, 'modules',link,'rtm',link,'bin']);
+addpath([Astro_FP,link, 'modules',link,'rtm',link,'example_patterns']);
+addpath([Astro_FP,link, 'modules',link,'rtm',link,'logsample']);
+addpath([Astro_FP,link, 'modules',link,'rtm',link,'runRTM']);
+addpath([Astro_FP,link, 'modules',link,'rtm',link,'misc_refine']);
+
 addpath([Astro_FP,link, 'utils']);
 addpath([Astro_FP,link, 'phases']);
 addpath([Astro_FP,link, 'testing']);
-addpath([Astro_FP,link, 'decks']);
+
 addpath([Astro_FP,link, 'outputs']);
 addpath([Astro_FP,link, 'plot']);
 addpath([Astro_FP]);

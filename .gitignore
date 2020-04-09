@@ -1,6 +1,9 @@
 /utils/gmail.m
 /testing/*
 /outputs/*
+/phases/cifs/*
+/phases/masterpatterns/*
+/phases/phasefiles/*
 
 # Logs and databases #
 ######################
@@ -26,4 +29,3 @@ Thumbs.db
 #Matlab Files
 *.asv
 *.fig
-*.mat

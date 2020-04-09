@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="WINDOWS-1252" standalone="yes"?>
+<TRTSpectrum>
+  <RTHeader/>
+  <ClassInstance Type="TRTSpectrum" Name="spec">
+    <TRTHeaderedClass>
+      <ClassInstance Type="TRTDetectorHeader">
+        <TRTKnownHeader>
+          <Type>RTDetector</Type>
+          <Version>5</Version>
+          <Size>9936</Size>
+        </TRTKnownHeader>
+        <Technology>SDDpr</Technology>
+        <Serial>13613</Serial>
+        <Type>XFlash 6|60</Type>
+        <DetectorThickness>4.5E-1</DetectorThickness>
+        <SiDeadLayerThickness>2.9E-2</SiDeadLayerThickness>
+        <DetLayers>eJyzcUkt8UmsTC0qtrMB0wYKjiX5ubZKhsZKCiEZmcnZeanFxbZKpq66xkr6UDWGUDXmKEos9ExddY3gioygikxRFJkhm2MMVWKGW4kJVIkFqhK4VfoI9wMAqUU9Ow==</DetLayers>
+        <WindowType>slew AP3.3</WindowType>
+        <WindowLayers>
+          <Layer0 Atom="5" Thickness="1.3E-2"/>
+          <Layer1 Atom="6" Thickness="1.45E-1"/>
+          <Layer2 Atom="7" Thickness="4.5E-2"/>
+          <Layer3 Atom="8" Thickness="8.5E-2"/>
+          <Layer4 Atom="13" Thickness="3.5E-2"/>
+          <Layer5 Atom="14" Thickness="3.8E2" RelativeArea="2.3E-1"/>
+        </WindowLayers>
+        <CorrectionType>3</CorrectionType>
+        <ResponseFunctionCount>21</ResponseFunctionCount>
+        <SampleCount>5</SampleCount>
+        <SampleOffset>-3</SampleOffset>
+        <PulsePairResTimeCount>8</PulsePairResTimeCount>
+        <PileUpMinEnergy>4E-1</PileUpMinEnergy>
+        <PileUpWithBG>1</PileUpWithBG>
+        <TailFactor>1</TailFactor>
+        <ShelfFactor>1</ShelfFactor>
+        <ShiftFactor>4.09E-1</ShiftFactor>
+        <ShiftFactor2>-8.9E-1</ShiftFactor2>
+        <ShiftData>0.07,0.0058,0.183,0.0078,0.277,0.0058,0.555,0,1.1,0,3.293,0.0064,5.89,0,0,0,0,0,</ShiftData>
+        <PPRTData>0.95,2.891959,1.05,2.195911,1.55,1.700256,1.75,1.604574,3.75,1.155987,4.55,0.980248,5.95,1.003,8.05,1.004377,</PPRTData>
+        <ResponseFunction>0,0.01,0.000801,0.01,0.00298,0.01,0.008902,0.01,0.025,0.010046,0.041098,0.013475,0.04702,0.017302,0.049199,0.019237,0.05,0.02,</ResponseFunction>
+        <ResponseFunction>0,0.03,0.00444,0.03,0.01651,0.03,0.049318,0.03,0.1385,0.03023,0.227682,0.047375,0.26049,0.06651,0.27256,0.076185,0.277,0.08,</ResponseFunction>
+        <ResponseFunction>0,0.03,0.006283,0.03,0.023364,0.03,0.069793,0.03,0.196,0.030228,0.322207,0.047377,0.368636,0.066512,0.385717,0.076186,0.392,0.08,</ResponseFunction>
+        <ResponseFunction>0,0,0.008415,0,0.031291,0,0.093473,0,0.2625,0,0.431527,0.000035,0.493709,0.000073,0.516585,0.000092,0.525,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.010836,0,0.040291,0,0.120357,0,0.338,0,0.555643,0.000035,0.635709,0.000073,0.665164,0.000092,0.676,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.016687,0,0.062045,0,0.185343,0,0.5205,0,0.855657,0.000035,0.978955,0.000073,1.024313,0.000092,1.041,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.020101,0,0.07474,0,0.223266,0,0.627,0,1.030734,0.000035,1.17926,0.000073,1.233899,0.000092,1.254,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.023836,0,0.088627,0,0.26475,0,0.7435,0,1.22225,0.000035,1.398373,0.000073,1.463164,0.000092,1.487,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.027891,0,0.103707,0,0.309795,0,0.87,0,1.430205,0.000035,1.636293,0.000073,1.712109,0.000092,1.74,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.030776,0,0.114435,0,0.341842,0,0.96,0,1.578158,0.000035,1.805565,0.000073,1.889224,0.000092,1.92,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.032283,0,0.120037,0,0.358578,0,1.007,0,1.655422,0.000035,1.893963,0.000073,1.981717,0.000092,2.014,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.036996,0,0.13756,0,0.410923,0,1.154,0,1.897077,0.000035,2.17044,0.000073,2.271004,0.000092,2.308,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.05918,0,0.220049,0,0.657334,0,1.846,0,3.034665,0.000035,3.471952,0.000073,3.63282,0.000092,3.692,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.079378,0,0.295146,0,0.881668,0,2.476,0,4.070332,0.000035,4.656854,0.000073,4.872623,0.000092,4.952,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.119867,0,0.445699,0,1.331404,0,3.739,0,6.146595,0.000035,7.0323,0.000073,7.358133,0.000092,7.478,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.148303,0,0.551433,0,1.647253,0,4.626,0,7.604747,0.000035,8.700567,0.000073,9.103698,0.000092,9.252,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.176322,0,0.655616,0,1.958472,0,5.5,0,9.041529,0.000035,10.344384,0.000073,10.823678,0.000092,11,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.208381,0,0.774819,0,2.314557,0,6.5,0,10.685443,0.000035,12.225181,0.000073,12.791619,0.000092,13,0.0001,</ResponseFunction>
+        <ResponseFunction>0,0,0.24044,0,0.894022,0,2.670643,0,7.5,0,12.329357,0,14.105978,0,14.759561,0,15,0,</ResponseFunction>
+        <ResponseFunction>0,0,0.320586,0,1.192029,0,3.560857,0,10,0,16.439142,0,18.80797,0,19.679415,0,20,0,</ResponseFunction>
+        <ResponseFunction>0,0,1.60293,0,5.960146,0,17.804287,0,50,0,82.195709,0,94.039856,0,98.397072,0,100,0,</ResponseFunction>
+      </ClassInstance>
+      <ClassInstance Type="TRTESMAHeader">
+        <TRTKnownHeader>
+          <Type>RTESMA</Type>
+          <Size>690</Size>
+        </TRTKnownHeader>
+        <PrimaryEnergy>2E1</PrimaryEnergy>
+        <ReferenceFactor>-1</ReferenceFactor>
+        <ReferenceStdDev>-1</ReferenceStdDev>
+        <BaseRefStdDev>2.000100008E-3</BaseRefStdDev>
+        <ElevationAngle>3.5E1</ElevationAngle>
+        <TiltAngle>0.0001E1</TiltAngle>
+        <CoatCorrection/>
+        <Magnification>8E3</Magnification>
+        <WorkingDistance>2.289617E1</WorkingDistance>
+      </ClassInstance>
+      <ClassInstance Type="TRTSpectrumHardwareHeader">
+        <TRTKnownHeader>
+          <Type>RTHardware</Type>
+          <Size>183</Size>
+        </TRTKnownHeader>
+        <RealTime>31</RealTime>
+        <LifeTime>13</LifeTime>
+        <DeadTime>5.8E1</DeadTime>
+        <ZeroPeakPosition>-47</ZeroPeakPosition>
+        <ZeroPeakFrequency>1000</ZeroPeakFrequency>
+        <PulseDensity>786692</PulseDensity>
+        <Amplification>2E4</Amplification>
+        <ShapingTime>275000</ShapingTime>
+        <DetectorTemperature>0</DetectorTemperature>
+        <SPVType>SPV3</SPVType>
+        <SPVRevision>XSPVIII R1.0.12 BNA</SPVRevision>
+      </ClassInstance>
+    </TRTHeaderedClass>
+    <ClassInstance Type="TRTSpectrumHeader">
+      <Size>82</Size>
+      <Date>6.12.2018</Date>
+      <Time>10:51:32</Time>
+      <ChannelCount>2039</ChannelCount>
+      <CalibAbs>-4.7135571E-1</CalibAbs>
+      <CalibLin>9.998E-3</CalibLin>
+      <SigmaAbs>8.585985035E-4</SigmaAbs>
+      <SigmaLin>3.959516845E-4</SigmaLin>
+    </ClassInstance>
+    <Channels>0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,3,0,0,1,4,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,5,7,6,12,14,12,20,21,11,16,15,6,5,7,5,4,5,4,7,7,6,8,3,4,2,7,11,10,10,12,10,12,12,20,12,21,19,14,15,12,9,11,8,11,13,17,28,28,28,28,31,29,54,58,79,89,86,105,124,142,112,101,130,114,113,101,88,107,108,64,51,37,31,16,11,5,13,12,6,5,10,10,6,9,10,6,6,12,8,11,8,4,8,7,4,5,4,5,10,4,10,7,7,6,9,9,12,7,9,9,10,7,11,13,11,9,12,14,10,11,13,14,20,15,32,35,37,37,37,48,40,42,40,21,25,24,15,16,11,14,8,13,11,10,4,12,5,14,22,16,33,31,27,25,44,33,29,38,35,37,32,29,34,20,20,16,21,16,12,11,12,9,14,8,6,7,12,8,5,12,7,9,7,5,7,5,5,6,12,7,15,3,16,5,4,6,10,6,7,8,9,10,10,8,8,15,18,13,12,21,17,17,25,20,20,12,13,9,10,10,12,12,11,8,13,6,7,6,10,5,9,8,10,10,8,8,8,4,14,10,10,7,6,7,3,6,5,3,7,6,9,11,3,4,9,5,7,10,7,6,7,7,4,8,7,8,5,3,7,6,7,7,7,6,7,1,8,3,5,5,10,7,7,6,9,4,5,8,5,6,7,7,4,9,13,6,13,10,7,2,6,4,5,6,8,5,3,5,11,1,8,6,4,8,4,3,4,5,4,5,7,6,6,6,5,4,3,5,4,6,6,5,3,6,5,6,6,5,3,9,7,4,7,4,6,9,6,4,5,8,8,6,5,8,3,3,6,3,2,2,6,7,3,6,5,8,3,2,4,1,4,1,6,1,5,3,7,3,6,6,8,6,8,3,8,3,3,2,3,3,6,6,7,3,5,1,7,5,1,4,6,7,3,6,6,6,1,4,2,2,4,6,5,3,4,5,3,4,4,1,3,4,4,6,2,1,5,2,5,1,5,1,4,6,3,3,6,3,3,5,4,5,7,8,7,5,0,4,4,6,3,3,5,2,1,4,6,2,2,1,4,4,4,5,2,3,2,2,4,2,3,4,3,3,8,9,2,3,6,2,3,1,6,3,6,3,5,3,4,3,4,4,3,3,3,4,2,1,1,1,2,3,5,3,4,3,6,5,6,9,6,13,8,15,20,29,23,29,36,28,39,34,39,40,34,23,32,17,21,18,10,11,10,7,12,7,7,7,3,6,4,1,3,4,4,2,3,2,3,5,5,3,5,8,5,5,4,6,2,2,3,1,3,4,1,5,5,2,8,7,7,17,3,8,4,8,5,5,3,4,5,6,5,1,3,7,4,0,4,0,4,3,7,2,5,5,3,2,4,5,4,5,5,2,3,2,3,1,1,3,4,2,5,4,2,1,3,2,3,0,2,1,3,5,3,4,1,2,3,3,2,4,4,1,0,1,5,1,0,1,1,2,3,4,3,1,4,0,1,3,2,7,1,3,6,4,7,8,6,7,17,10,17,16,21,26,31,51,45,55,44,48,67,66,49,40,19,48,39,23,27,23,13,16,24,11,5,7,7,4,6,5,0,3,3,4,4,2,2,3,4,7,2,5,2,2,1,5,7,9,4,7,6,13,11,5,16,19,24,26,26,30,29,51,45,44,46,41,39,33,39,36,29,30,22,15,22,22,12,24,8,10,10,15,14,11,11,9,10,6,14,9,6,7,9,4,6,2,1,2,6,2,1,3,3,5,3,3,3,2,3,3,2,1,0,1,3,3,3,1,3,3,2,4,5,2,4,1,5,2,1,1,3,2,3,5,8,6,8,7,12,10,14,6,18,7,7,8,10,11,13,11,7,7,9,8,4,8,7,11,5,5,5,6,2,4,4,2,3,3,5,2,3,2,6,5,2,5,1,2,1,3,1,3,2,1,3,1,0,4,3,0,4,2,0,1,1,4,0,2,0,2,0,2,2,0,1,1,1,1,2,3,0,3,2,1,0,1,0,4,2,3,3,1,2,2,2,2,1,1,2,2,2,2,1,4,1,1,2,1,1,4,6,1,3,1,0,0,1,2,2,2,4,3,1,3,2,4,1,7,1,3,1,3,1,1,1,0,1,1,2,2,3,2,3,3,0,3,1,3,0,2,2,1,4,3,2,0,1,3,5,4,1,0,2,1,0,1,2,0,2,1,2,1,1,4,3,0,1,0,1,1,4,2,2,2,3,1,0,0,0,4,2,1,1,3,2,4,1,2,0,1,1,2,2,4,2,2,1,0,1,3,0,1,1,1,0,3,0,2,3,0,2,1,1,3,1,1,2,1,2,1,2,0,1,1,2,2,3,2,0,1,0,1,1,1,0,3,1,2,1,0,5,1,1,1,1,5,0,0,0,0,1,3,1,1,1,2,1,3,1,2,3,1,3,5,3,0,1,1,0,1,0,3,0,3,0,0,3,2,4,0,1,1,1,2,0,1,1,2,0,0,0,3,1,0,2,0,1,0,3,1,0,1,0,2,2,2,3,2,2,1,0,3,1,1,1,0,2,1,2,3,1,0,0,0,2,2,1,2,0,0,1,1,1,2,1,2,2,1,1,2,1,0,2,0,0,0,2,0,1,1,2,1,0,0,2,0,0,1,2,1,2,1,1,0,0,0,2,1,2,2,0,1,2,0,0,0,0,0,2,2,1,0,0,0,0,1,0,0,1,1,1,0,3,0,0,0,0,1,1,1,1,1,0,1,0,1,0,1,0,0,1,0,0,1,0,0,1,0,1,2,0,0,1,1,3,0,2,2,0,4,0,0,0,1,1,1,0,2,2,1,0,2,1,1,0,0,0,0,1,0,1,1,2,1,1,1,0,0,1,1,1,0,3,1,4,1,0,1,0,0,0,2,0,0,1,0,0,1,0,1,1,2,1,1,1,0,0,3,0,0,0,1,3,0,0,0,0,1,2,2,2,0,1,0,1,0,1,1,1,0,2,0,0,1,0,0,0,1,0,0,0,4,0,2,0,0,0,1,1,2,1,0,0,0,0,1,1,1,0,2,0,1,1,0,0,0,0,0,2,0,0,1,0,2,0,0,2,2,4,1,0,2,1,0,0,1,1,1,1,3,0,1,4,1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,0,0,0,1,0,1,0,1,1,0,2,1,0,0,0,1,1,1,1,0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,2,1,0,2,3,0,2,0,1,0,0,2,0,1,0,0,0,0,1,1,1,0,0,0,0,1,1,0,1,0,0,1,0,1,0,1,0,1,0,0,1,0,1,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,2,0,1,1,1,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,0,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,1,0,0,1,0,1,0,2,0,0,0,0,0,2,1,0,0,1,0,1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,0,1,0,1,0,0,0,0,0,0,2,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,0,0,1,0,0,0,0,1,1,0,1,1,0,0,0,0,0,1,0,0,2,0,0,0,0,0,1,0,0,0,2,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,2,0,1,1,0,0,0,2,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1</Channels>
+    <ClassInstance Type="TRTBaseList"/>
+    <ChildClassInstances>
+      <ClassInstance Type="TRTSpectrumChartConfigurationData">
+        <TRTChartConfigurationData>
+          <XMin>6.45E1</XMin>
+          <XMax>2.0485E3</XMax>
+          <YMin>0</YMin>
+          <YMax>3.277669052E3</YMax>
+          <YMin2>0</YMin2>
+          <YMax2>3.277669052</YMax2>
+          <XAxisLog>0</XAxisLog>
+          <YAxisLog>0</YAxisLog>
+          <YAxisSqrt>0</YAxisSqrt>
+          <LegendeVisible>0</LegendeVisible>
+          <GridMode>Short</GridMode>
+          <GridStyle>Lines</GridStyle>
+          <GridColor>236,233,225</GridColor>
+          <GridTransparency>0</GridTransparency>
+          <MinXTicks>5</MinXTicks>
+          <MinYTicks>5</MinYTicks>
+          <SeriesScaling>0</SeriesScaling>
+          <AxisFont>
+            <Name>Calibri</Name>
+            <Size>12</Size>
+            <Color>0,0,0</Color>
+          </AxisFont>
+          <LegendeFont>
+            <Name>Calibri</Name>
+            <Size>12</Size>
+            <Color>0,0,0</Color>
+          </LegendeFont>
+          <RightAxis>0</RightAxis>
+          <SeriesProperties>
+            <ClassInstance Type="TRTChartSeriesConfigurationData">
+              <Name>1</Name>
+              <Description>1</Description>
+              <Visible>1</Visible>
+              <Selected>1</Selected>
+              <LineColor>133,158,72</LineColor>
+              <FillColor>133,158,72</FillColor>
+              <Filled>1</Filled>
+              <LineStyle>Solid</LineStyle>
+              <LineWidth>1</LineWidth>
+              <Mark>0</Mark>
+              <Factor>1</Factor>
+              <Offset>0</Offset>
+            </ClassInstance>
+          </SeriesProperties>
+        </TRTChartConfigurationData>
+        <EnergyMode>0</EnergyMode>
+        <YAxisMode>Hertz</YAxisMode>
+        <RescaleLine>1</RescaleLine>
+        <RescaleArea>1</RescaleArea>
+        <RescaleStrength>0</RescaleStrength>
+        <InterpolateType>Linear</InterpolateType>
+        <ForegroundRegion>1</ForegroundRegion>
+        <CurrentSpectrum>1</CurrentSpectrum>
+        <CurrentSpectrumInFront>1</CurrentSpectrumInFront>
+        <ElementLinesVisible>1</ElementLinesVisible>
+        <ElementTextVisible>1</ElementTextVisible>
+        <TransparentText>0</TransparentText>
+        <EscLinesVisible>0</EscLinesVisible>
+        <NegativeCountsAllowed>0</NegativeCountsAllowed>
+        <DynamicLineMarkerHeight>0</DynamicLineMarkerHeight>
+        <CoatingElement>0</CoatingElement>
+        <RightAxisFactor>1</RightAxisFactor>
+        <LabelFont>
+          <Name>Calibri</Name>
+          <Size>12</Size>
+          <Color>0,0,0</Color>
+        </LabelFont>
+      </ClassInstance>
+    </ChildClassInstances>
+  </ClassInstance>
+</TRTSpectrum>
