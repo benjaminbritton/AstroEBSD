@@ -29,13 +29,13 @@ InputUser.HDF5FullFile=fullfile(InputUser.HDF5_folder,InputUser.HDF5_file);
 
 if exist(InputUser.HDF5FullFile) == 0
     InputUser.BCFFullFile=fullfile(InputUser.BCF_folder,InputUser.BCF_file);
-    
-    if strcmpi(InputUser.BCFFullFile,'bcf') == 0
+
+    if strcmpi(InputUser.BCFFullFile(end-2:end),'bcf') == 0
         InputUser.BCFFullFile=[InputUser.BCFFullFile '.bcf'];
     end
     
     if exist(InputUser.BCFFullFile) == 0
-        error('The input BCF file does not exist');
+        error(['The input BCF file does not exist' InputUser.BCFFullFile]);
     end
     
     if exist(InputUser.BCF2HDF5_loc) == 0

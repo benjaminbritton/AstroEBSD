@@ -51,9 +51,10 @@ correction.xrange=SettingsXCF.xrange;
 correction.yroi_num=SettingsXCF.yroi_num;
 correction.ycen=SettingsXCF.ycen;
 
+p=1;
 
-
-for p= 1:iterations
+while p < iterations
+    
     %cross correlate this pattern in X and Y to get shifts
     %generate a new pattern
     [ EBSP_iter ] = EBSP_gen( EBSP_geometry,rotmat_best,screen_int,isHex ); %generate the EBSP for this iteration
@@ -96,7 +97,15 @@ for p= 1:iterations
     %do this without generation of the template again
 %     [ rotmat_z_correction] = Angle_ShiftZ( EBSP_ref.logp,EBSP_iter_r.logp,correction,LPTsize,SettingsXCF2,RTM_setup.Rz ); %This generate the Z correction roation matrix for the x/y corrected image
 %     rotmat_best = rotmat_best * rotmat.ycorrFFT*rotmat.xcorrFFT * rotmat_z_correction;
+    angle.z_up=acos(rotmat_z_correction(1));
+    angle_tot=sum(abs([angle.z_up,angle.xcorrFFT,angle.ycorrFFT]));
     
+    %close the loop early if needed
+    if angle_tot < 8.7266e-04 % if the changes are smaller than 0.05*180/pi , close the iterations
+        p=iterations;
+    else
+        p=p+1;
+    end
 end
 
 %generate a new pattern
