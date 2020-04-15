@@ -23,8 +23,13 @@ function [ EBSP_out ] = EBSP_gen( EBSP_av,rotmat,screen_int,isHex )
 %screen_int = screens from a bin file reader
 %ixHex = screen info from the bin file reader
 %EBSP_out = pattern out
-r = [EBSP_av.xpts_screen(:), EBSP_av.ypts_screen(:), EBSP_av.ypts_screen(:)*0+1].*1./sqrt((EBSP_av.xpts_screen(:).^2+EBSP_av.ypts_screen(:).^2+1));
-r2 = r*rotmat';
+
+if isfield(EBSP_av,'r')
+    r2 = EBSP_av.r*rotmat';
+else
+    r = [EBSP_av.xpts_screen(:), EBSP_av.ypts_screen(:), EBSP_av.ypts_screen(:)*0+1].*1./sqrt((EBSP_av.xpts_screen(:).^2+EBSP_av.ypts_screen(:).^2+1));
+    r2 = r*rotmat';
+end
 
 %sample the pattern from the interpolant
 [i_data] = Cube_Sample(r2(:,1),r2(:,2),r2(:,3),screen_int,isHex);
