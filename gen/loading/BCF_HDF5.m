@@ -20,9 +20,18 @@ function [ MapData,MicroscopeData,PhaseData,EBSPData ] = BCF_HDF5( InputUser )
 %% Versioning
 %v1 - TBB 14/04/2017
 
+if isfield(InputUser,'EBSD_file')
+    InputUser.EBSD_File=InputUser.EBSD_file;
+end
+
 InputUser.HDF5_file=[InputUser.EBSD_File '.h5'];
+
+
 InputUser.BCF_file=[InputUser.EBSD_File '.bcf'];
 
+if ~isfield(InputUser,'HDF5_folder')
+    InputUser.HDF5_folder=InputUser.Folder;
+end
 
 InputUser.HDF5FullFile=fullfile(InputUser.HDF5_folder,InputUser.HDF5_file);
 
