@@ -11,22 +11,22 @@ function [ EBSP2,Settings_Cor_out] = EBSP_BGCor( EBSP,Settings_Cor )
 % %background correction
 % Settings_Cor.gfilt=1; %use a low pass filter
 % Settings_Cor.gfilt_s=5; %low pass filter sigma
-% 
+%
 % %radius mask
 % Settings_Cor.radius=1; %use a radius mask
 % Settings_Cor.radius_frac=0.9; %fraction of the pattern width to use as the mask
-% 
+%
 % %hold pixel
 % Settings_Cor.hotpixel=1; %hot pixel correction
 % Settings_Cor.hot_thresh=1000; %hot pixel threshold
-% 
+%
 % %resize
 % Settings_Cor.resize=1; %resize correction
 % Settings_Cor.size=150; %image width
-% 
+%
 % Settings_Cor.RealBG=0; %use a real BG
 % Settings_Cor.EBSP_bgnum=30; %number of real pattern to use for BG
-% 
+%
 % Settings_Cor.SquareCrop=1; %crop to a square
 %
 %Settings_Cor
@@ -45,8 +45,12 @@ end
 EBSP2=EBSP;
 
 %check fields exist & create if needed - this is ordered in the order of
-%operations to aid with debugging & adding new correction routines 
+%operations to aid with debugging & adding new correction routines
 %as needed
+
+if ~isfield(Settings_Cor,'tkd_onaxis')
+    Settings_Cor.tkd_onaxis = [0 0 0 0 0]; %[1/0, xc,yc,ro,ri]
+end
 
 if ~isfield(Settings_Cor,'MeanCentre')
     Settings_Cor.MeanCentre=0;
@@ -113,14 +117,43 @@ if ~isfield(Settings_Cor,'TKDBlur2')
 end
 
 if ~isfield(Settings_Cor,'LineError')
-   Settings_Cor.LineError=0; 
+    Settings_Cor.LineError=0;
 end
 
 if ~isfield(Settings_Cor,'MeanCentre')
-   Settings_Cor.LineError=0; 
+    Settings_Cor.LineError=0;
 end
 
 %% Start the corrections
+if Settings_Cor.RealBG == 1
+    EBSP2=EBSP2./Settings_Cor.EBSP_bg;
+end
+
+if Settings_Cor.tkd_onaxis(1) == 1 %blank the central beam and crop the edge
+    [xgrid,ygrid]=meshgrid(1:size(EBSP2,2),1:size(EBSP2,1));
+    
+    tkd_set=Settings_Cor.tkd_onaxis(2:5);%[3,3,30,80];
+    
+    xc=floor(mean(xgrid(:)))+tkd_set(1);
+    yc=floor(mean(ygrid(:)))+tkd_set(2);
+    ri=tkd_set(3);
+    ro=tkd_set(4);
+    pgrid=sqrt((xgrid-xc).^2+(ygrid-yc).^2);
+    grid_ok=false(size(xgrid));
+    grid_ok(pgrid > ri & pgrid < ro) = true;
+    pat_filtered = zeros(size(EBSP2));
+    pat_filtered(grid_ok)=EBSP2(grid_ok);
+    %     EBSP2=pat_filtered;
+    
+    x_new=xc+(-ro:ro);
+    y_new=yc+(-ro:ro);
+    EBSP2=pat_filtered(y_new,x_new);
+    mean_tkd=mean(EBSP2(EBSP2~=0));
+    std_tkd=std(EBSP2(EBSP2~=0));
+    
+    EBSP2(EBSP2~=0)=(EBSP2(EBSP2~=0)-mean_tkd)/std_tkd;
+    
+end
 
 if Settings_Cor.SquareCrop == 1 %crop the image to a square
     EBSP_size=min(size(EBSP2));
@@ -138,9 +171,7 @@ if Settings_Cor.SatCor == 1 %saturation correction
     EBSP2(mvals)=I_noise(mvals);
 end
 
-if Settings_Cor.RealBG == 1
-    EBSP2=EBSP2./Settings_Cor.EBSP_bg;
-end
+
 
 if Settings_Cor.SplitBG == 1
     EBSPw=size(EBSP2,2);
@@ -153,7 +184,7 @@ if Settings_Cor.SplitBG == 1
     EBSP2b_g = imgaussfilt(EBSP2b,gf);
     
     EBSP2=[EBSP2a./EBSP2a_g EBSP2b./EBSP2b_g];
-   
+    
 end
 
 %cor the pattern for hot pixels
@@ -242,7 +273,7 @@ if Settings_Cor.TKDBlur2 == 1
         hpix=find(abs(EBSP_med-EBSP2) > 0.8);
         EBSP2(hpix)=EBSP_med(hpix);
     end
-%     EBSP2=fix_mean(EBSP2);
+    %     EBSP2=fix_mean(EBSP2);
 end
 
 if Settings_Cor.MeanCentre==1
