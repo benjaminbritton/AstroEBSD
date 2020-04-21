@@ -100,6 +100,8 @@ tile.ret_comps(tiling_no)=ret_comps;
 pTime(['Tile ',num2str(tiling_no),' selected ',num2str(ret_comps),' components.'],t1);
 rPCA_aoi_VMrotation
 
+VMOutput.explained=Output.explained;
+
 if printing==1
     pPCA_aoi_VM;
 end
