@@ -42,6 +42,11 @@ InputUser.SavingFolder='C:\Users\tpm416\Documents\PCA_Output';
 InputUser.MTEX_loc='C:\Communal_MatlabPlugins\mtex-5.2.beta2';
 InputUser.Astro_loc='C:\Users\tpm416\Documents\GitHub\AstroEBSD';
 
+% - These are default locations but you can change them if required - 
+% .bin, .pha and .cif file locations
+RTM_setup.Bin_loc=fullfile(InputUser.Astro_loc,'phases','masterpatterns');
+RTM_setup.Phase_Folder=fullfile(InputUser.Astro_loc,'phases');
+
 %% CRITICAL settings and setup - these determine which analysis to run.
 % YES = 1, NO = 0
 

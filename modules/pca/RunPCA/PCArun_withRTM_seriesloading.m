@@ -12,10 +12,6 @@
 cd(InputUser.HDF5_folder)
 PCA_Setup.cropping=1;
 
-% .bin, .pha and .cif file locations
-RTM_setup.Bin_loc=fullfile(InputUser.Astro_loc,'phases','masterpatterns');
-RTM_setup.Phase_Folder=fullfile(InputUser.Astro_loc,'phases');
-
 % initialise orientation matrices
 RTM_setup.Rz=@(theta)[cos(theta) sin(theta) 0;-sin(theta) cos(theta) 0;0 0 1]; %z rotation
 RTM_setup.Rx=@(theta)[1 0 0;0 cos(theta) sin(theta);0 -sin(theta) cos(theta)]; %x rotation
