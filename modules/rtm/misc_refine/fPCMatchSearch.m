@@ -14,7 +14,8 @@ phases=PatternData.Phase;
 %screen_int and RTM_info could be sliced better
 %likley important to cluster by phase and then parfor on each phase
 
-parfor n=1:num_pts
+for n=1:num_pts
+    n
     num_phase=phases(n);
     %extract the pattern from the data
     [ Pat_Ref ] = bReadEBSP(MapInfo.EBSPData,PatternData.P(n));
@@ -26,10 +27,17 @@ parfor n=1:num_pts
     GMat_test=conv_EA_to_G(PatternData.Eulers(n,:));
     rotmat=GMat_test*Detector_tilt;
     
-    [ EBSD_geom ] = EBSP_Gnom( PatternInfo,PatternData.PC_start(n,:) );
+    if isfield(Refine,'PC_start')
+        PCStart=Refine.PC_start;
+    else
+        PCStart=PatternData.PC_start(n,:);
+    end
+       
+    
+    [ EBSD_geom ] = EBSP_Gnom( PatternInfo,PCStart);
     
     %iterate a better orientation
-    [RotMat_R] = refine5(Pat_Ref_r,EBSD_geom,PatternData.PC_start(n,:),rotmat,SettingsXCF,screen_int(num_phase),RTM_info(num_phase).isHex,RTM_setup);
+    [RotMat_R] = refine5(Pat_Ref_r,EBSD_geom,PCStart,rotmat,SettingsXCF,screen_int(num_phase),RTM_info(num_phase).isHex,RTM_setup);
     
     %refine the PC for this pattern
     Best_PC(n,:) = fPCRefine(PatternData.PC_start(n,:),Pat_Ref_r,RotMat_R,PatternInfo,Refine,SettingsXCF,screen_int(num_phase),RTM_info(num_phase),RTM_setup);
@@ -42,6 +50,8 @@ parfor n=1:num_pts
     Best_PH(n)=regout(4);
     
     if Refine.debug == 1 %if you need to debug
+        Settings_Cor.tkd_onaxis=0; %turns off the resize and centre crop for TKD
+        
         %Redrawn from Bruker data
         [ Pat_Template ] = EBSP_gen( EBSD_geom,rotmat,screen_int(num_phase),RTM_info(num_phase).isHex ); %generate the EBSP for this iteration
         [ Pat_Template ] = EBSP_BGCor( Pat_Template,Settings_Cor );

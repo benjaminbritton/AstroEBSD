@@ -126,7 +126,9 @@ end
 
 %% Start the corrections
 if Settings_Cor.RealBG == 1
-    EBSP2=EBSP2./Settings_Cor.EBSP_bg;
+    if size(EBSP2) == size(Settings_Cor.EBSP_bg) %this if statement helps if the debug isn't working properly
+        EBSP2=EBSP2./Settings_Cor.EBSP_bg;
+    end
 end
 
 if Settings_Cor.tkd_onaxis(1) == 1 %blank the central beam and crop the edge

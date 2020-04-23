@@ -16,6 +16,7 @@ if isfield(PatternInfo,'ScreenWidth')
     PatternInfo.size(1)=PatternInfo.ScreenHeight;
 end
 
+
 if isfield(PCin,'PCX')
     PC(1)=PCin.PCX;
     PC(2)=PCin.PCY;
