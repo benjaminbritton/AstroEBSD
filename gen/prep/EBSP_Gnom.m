@@ -16,6 +16,7 @@ if isfield(PatternInfo,'ScreenWidth')
     PatternInfo.size(1)=PatternInfo.ScreenHeight;
 end
 
+
 if isfield(PCin,'PCX')
     PC(1)=PCin.PCX;
     PC(2)=PCin.PCY;
@@ -38,7 +39,7 @@ EBSP.PC=[PC(1) PC(2) PC(3)];
 
 %set up the screen for interpolation
 [EBSP.ypts_screen,EBSP.xpts_screen]=ndgrid(EBSP.y_screen,EBSP.x_screen);
-
+EBSP.r = [EBSP.xpts_screen(:), EBSP.ypts_screen(:), EBSP.ypts_screen(:)*0+1].*1./sqrt((EBSP.xpts_screen(:).^2+EBSP.ypts_screen(:).^2+1));
 
 end
 

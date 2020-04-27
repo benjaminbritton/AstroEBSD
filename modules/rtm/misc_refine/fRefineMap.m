@@ -10,7 +10,7 @@ PhaseInput=InputUser.Phases{Refine.phase};
 pTime(['Set up RTM PC refinement to pattern match against ' PhaseInput],t1);
 [ ~,~,~,~,~, RTM_info ] = Phase_Builder_RTM( {PhaseInput},RTM.Phase_Folder);
 %generate the simulated pattern cube
-[screen_int,facedata] = Cube_Generate(RTM_info.bin_file,RTM_info.isHex);
+[screen_int] = Cube_Generate(RTM_info.bin_file,RTM_info.isHex);
 
 %% Select points and refine
 
