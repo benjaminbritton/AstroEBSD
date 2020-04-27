@@ -61,6 +61,8 @@ screen_int.p3=griddedInterpolant(gx,gy,facedata(:,:,3),'cubic'); %z+
 screen_int.p4=griddedInterpolant(gx,gy,facedata(:,:,4),'cubic'); %x-
 screen_int.p5=griddedInterpolant(gx,gy,facedata(:,:,5),'cubic'); %y-
 screen_int.p6=griddedInterpolant(gx,gy,facedata(:,:,6),'cubic'); %z-
+
+screen_int.isHex=isHex;
   
 % screen_int2.p1=griddedInterpolant(gx,gy,1+0*facedata(:,:,1),'cubic'); %x+
 % screen_int2.p2=griddedInterpolant(gx,gy,2+0*facedata(:,:,2),'cubic'); %y+
