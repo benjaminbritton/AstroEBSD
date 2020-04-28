@@ -178,6 +178,10 @@ for num_lib=1:num_phases %run through each phase
     %generate the FFT of all patterns for the SO(3) library usin mean PC
     [ template_library ] = Library_Gen(Mean_EBSD_geom,screen_int,RTM_info.isHex,library_G,2,SettingsXCF);
 
+    % get adjustment factor for radial crop
+    radial_adjustment=fPHFac(Mean_EBSD_geom,Settings_CorX,screen_int,RTM,SettingsXCF);
+    
+    
     switch RTM.parsearch % library serach in parallel: RTM.parsearch=1
         case 1 %run through each pattern in series, with library search in parallel
             
@@ -193,7 +197,7 @@ for num_lib=1:num_phases %run through each phase
                 %store the orientation
                 G_Out(:,:,P_test,num_lib)=G_Refined;
                 %store the PH
-                PH_Out(P_test,num_lib)=regout_R(4);
+                PH_Out(P_test,num_lib)=regout_R(4)./radial_adjustment;
             end
             
         case 2 % analyse PATTERNS in parallel, with lib search in series
@@ -210,7 +214,7 @@ for num_lib=1:num_phases %run through each phase
                 %store the orientation
                 G_Out(:,:,P_test,num_lib)=G_Refined;
                 %store the PH
-                PH_Out(P_test,num_lib)=regout_R(4);
+                PH_Out(P_test,num_lib)=regout_R(4)./radial_adjustment;
             end
             
         case 0 %do everything in series
@@ -227,7 +231,10 @@ for num_lib=1:num_phases %run through each phase
                 %store the orientation
                 G_Out(:,:,P_test,num_lib)=G_Refined;
                 %store the PH
-                PH_Out(P_test,num_lib)=regout_R(4);
+                PH_Out(P_test,num_lib)=regout_R(4)./radial_adjustment;
+                
+                
+                
             end
             
     end %end the switch
@@ -304,6 +311,8 @@ end
 % RTM.Output.euler1=Euler1;
 % RTM.Output.euler2=Euler2;
 % RTM.Output.euler3=Euler3;
+
+%%
 
 RTM.Output.PeakHeight=PH_Out;
 RTM.Output.Eulers=EAng_Out;

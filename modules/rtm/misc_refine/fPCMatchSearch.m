@@ -15,7 +15,7 @@ phases=PatternData.Phase;
 %likley important to cluster by phase and then parfor on each phase
 
 for n=1:num_pts
-    n
+    %n
     num_phase=phases(n);
     %extract the pattern from the data
     [ Pat_Ref ] = bReadEBSP(MapInfo.EBSPData,PatternData.P(n));
