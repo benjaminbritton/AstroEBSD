@@ -13,8 +13,8 @@ home
 
 %Choose the input patterns (RC-EBSPs) you want to compare to library.
 %These will be created from the PCA_deck file
-load('C:\Users\tpm416\Documents\Einsle_PCAOutput\simplectite_EBSD_map_EBSD+EDS\weighting1_vt0,05\Results.mat');
-cd('C:\Users\tpm416\Documents\Einsle_PCAOutput\simplectite_EBSD_map_EBSD+EDS\weighting1_vt0,05')
+load('asdf\Results.mat');
+cd('asdf\weighting1_vt0,05')
 
 % Set up and locate plugins
 InputUser.MTEX_loc='C:\Communal_MatlabPlugins\mtex-5.2.beta2';
