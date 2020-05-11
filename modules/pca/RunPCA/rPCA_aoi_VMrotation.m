@@ -75,6 +75,24 @@ if PCA_Setup.PCA_EDX==1;
     end
 end
 
+%% go through and add zeros where patterns weren't loaded in the aoi
+VMOutput.coeffVM2=zeros(VMOutput.width*VMOutput.height,VMOutput.NumPCA);
+[x_grid,y_grid]=meshgrid(tile.colstart(tiling_no):tile.colfin(tiling_no),tile.rowstart(tiling_no):tile.rowfin(tiling_no));
+xn=size(x_grid,2);
+yn=size(x_grid,1);
+
+for i=1:size(VMOutput.coeffVM,1)
+    
+        x=tile.xloaded(i);
+        y=tile.yloaded(i);
+        ind=sub2ind([VMOutput.height,VMOutput.width],y,x);
+    
+        VMOutput.coeffVM2(ind,:)=VMOutput.coeffVM(i,:);
+        tile.xy_loc(i)=ind;
+        
+end
+
+%%
 %reshaping
 for n=1:VMOutput.NumPCA
     
@@ -84,7 +102,7 @@ for n=1:VMOutput.NumPCA
     
     % Below is just function of space, so no if statements required
     %how much each pixel in map is loaded by pattern n
-    VMOutput.Map_n=reshape(VMOutput.coeffVM(:,n),[VMOutput.height VMOutput.width]); % map_n is spatial, independent of kikuchis or spectra
+    VMOutput.Map_n=reshape(VMOutput.coeffVM2(:,n),[VMOutput.height VMOutput.width]); % map_n is spatial, independent of kikuchis or spectra
     VMOutput.PCA_VM_Map_n(:,:,n)=VMOutput.Map_n;
     
     %PCA_VM_num = map of dominant factor:

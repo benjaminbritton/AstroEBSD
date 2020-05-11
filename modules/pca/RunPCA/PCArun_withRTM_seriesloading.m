@@ -40,6 +40,7 @@ PCA_filenamesetup;
 
 %% Load metadata
 [MapInfo.MapData,MicroscopeData,PhaseData,MapInfo.EBSPData ]=bReadHDF5( InputUser );
+
 [MapInfo.Data_InputMap] = EBSD_Map(MapInfo.MapData,MicroscopeData);
 
 Plots.Radon=MapInfo.Data_InputMap.RadonQuality;

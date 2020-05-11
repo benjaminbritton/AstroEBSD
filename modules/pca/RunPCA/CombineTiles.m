@@ -50,8 +50,13 @@ for iii=1:n-1
     loadingmap_reshaped=[loadingmap_reshaped,tile.loadingmap_reshaped(iii.*cutpoint+1:cutpoint.*(iii+1),:)];
 end
 
+
 tile.map_reshaped=map_reshaped;
 tile.map_reshaped2=map_reshaped2;
+
+%ensure anything that was zero before is zero after
+tile.map_reshaped(tile.map_reshaped2==0)=0;
+
 %tile.watershed_reshaped=watershed_reshaped;
 tile.loadingmap_reshaped=loadingmap_reshaped;
 clear map_reshaped cutpoint map_reshaped2 watershed_reshaped loadingmap_reshaped

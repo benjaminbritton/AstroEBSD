@@ -18,44 +18,49 @@ NCOLS=double(max(MapData.XBeam)-min(MapData.XBeam))+1;
 NROWS=double(max(MapData.YBeam)-min(MapData.YBeam))+1;
 % NROWS=double(MicroscopeData.NROWS);
 max_pats=NCOLS*NROWS;
-if max_pats ~= double(size(MapData.DD,1))
-    error('This map is not rectangular')
-end
+% if max_pats ~= double(size(MapData.DD,1))
+%     error('This map is not rectangular')
+% end
+
+minrow=min(MapData.YBeam);
+mincol=min(MapData.XBeam);
 
 %% sort the data
+
+fullarray=zeros(MicroscopeData.NROWS,MicroscopeData.NCOLS);
+fullarray=fullarray.*nan;
+
 pv_list=sub2ind(double([MicroscopeData.NCOLS MicroscopeData.NROWS]),double(MapData.XBeam),double(MapData.YBeam));
 [pv_list2,ix]=sort(pv_list);
 pv_list_set=1:size(pv_list2);
-AreaData.PMap=reshape(pv_list_set(ix),[NCOLS NROWS])';
-AreaData.DD=reshape(double(MapData.DD(ix)),[NCOLS NROWS])';
-AreaData.MAD=reshape(double(MapData.MAD(ix)),[NCOLS NROWS])';
-AreaData.MADPhase=reshape(double(MapData.MADPhase(ix)),[NCOLS NROWS])';
-AreaData.NIndexedBands=reshape(double(MapData.NIndexedBands(ix)),[NCOLS NROWS])';
-AreaData.PCX=reshape(double(MapData.PCX(ix)),[NCOLS NROWS])';
-AreaData.PCY=reshape(double(MapData.PCY(ix)),[NCOLS NROWS])';
-AreaData.PHI=reshape(double(MapData.PHI(ix)),[NCOLS NROWS])';
-AreaData.phi2=reshape(double(MapData.phi2(ix)),[NCOLS NROWS])';
-AreaData.phi1=reshape(double(MapData.phi1(ix)),[NCOLS NROWS])';
-AreaData.RadonQuality=reshape(double(MapData.RadonQuality(ix)),[NCOLS NROWS])';
 
-AreaData.XBeam_Map=reshape(double(MapData.XBeam(ix)),[NCOLS NROWS])';
-AreaData.YBeam_Map=reshape(double(MapData.YBeam(ix)),[NCOLS NROWS])';
-AreaData.XSample=reshape(double(MapData.XSample(ix)),[NCOLS NROWS])';
-AreaData.YSample=reshape(double(MapData.YSample(ix)),[NCOLS NROWS])';
+contents={'PMap','DD','MAD','Phase','MADPhase','NIndexedBands','PCX','PCY','PHI','phi2','XBeam','YBeam','phi1','RadonQuality','XSample','YSample'};
+for i=1:length(contents)
+    area=fullarray;
+    try
+        if strcmp(contents{i},'PMap')
+            vals=pv_list_set(ix);
+        else
+            vals=MapData.(contents{i});
+        end
+    catch
+       warning([contents{i},' information not loaded!']);
+       continue
+    end
+        
+    area(pv_list)=vals;
+    area=reshape(area,size(area,2),size(area,1));
+    area=area(mincol:mincol+NCOLS-1,minrow:minrow+NROWS-1)';
 
-% PatList2Map=@(data,col,row)fliplr(rot90(reshape(double(data),[double(col) double(row)]),3));
-% 
-% plist=1:max_pats;
-% plist=plist(:);
-% 
-% XBeam_Map=PatList2Map(MapData.XBeam,NCOLS,NROWS);
-% YBeam_Map=PatList2Map(MapData.YBeam,NCOLS,NROWS);
-% PMap=PatList2Map(plist,NCOLS,NROWS);
-
-try 
-    AreaData.Phase=reshape(double(MapData.Phase(ix)),[NCOLS NROWS])';
-catch
-    warning('Phase data not loaded!')
+    if strcmp(contents{i},'XBeam')
+        name={'XBeam_Map'};
+    elseif strcmp(contents{i},'YBeam')
+        name={'YBeam_Map'};
+    else 
+        name=contents(i);
+    end
+    AreaData.(name{:})=area;
+            
 end
 
 X_axis=AreaData.XBeam_Map(1,:); X_axis=X_axis(:);

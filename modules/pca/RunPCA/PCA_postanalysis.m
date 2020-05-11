@@ -184,7 +184,10 @@ if post.AvSpectra==1
 end
 
 if post.phase==1
-    imagesc(RTM.Output.phase)
+    phase=RTM.Output.phase;
+    phase(phase==0)=nan;
+    
+    imagesc(phase,'AlphaData',~isnan(phase))
     colormap(gca,cmap)
     title('RTM phase assignment')
     hcb1=colorbar;
@@ -195,6 +198,8 @@ if post.phase==1
     savefig('Phases')
     print(gcf,'Phases','-dpng','-r300')
 end
+
+
 
 end
 %%

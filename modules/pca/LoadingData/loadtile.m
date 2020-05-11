@@ -24,7 +24,6 @@ tile.rowfin(tiling_no)=tile.rowstart(tiling_no)+MapInfo.cropped_height-1;
 tile.colstart(tiling_no)=(tile.xtile(tiling_no)-1).*MapInfo.cropped_width+1;
 tile.colfin(tiling_no)=tile.colstart(tiling_no)+MapInfo.cropped_width-1;
 
-
 %output as vector EBSP, yi and xi = row and column of the tile
 Data_InputMap=MapInfo.Data_InputMap;
 
@@ -33,8 +32,15 @@ Data_InputMap=MapInfo.Data_InputMap;
 xn=size(x_grid,2);
 yn=size(x_grid,1);
 
+%some of the pattern numbers may be nan - ie where the beam was not scanned
 %convert to p_numbers
-p_tot=numel(x_grid);
+pmap=Data_InputMap.PMap(tile.rowstart(tiling_no):tile.rowfin(tiling_no),tile.colstart(tiling_no):tile.colfin(tiling_no));
+p_nums=pmap(~isnan(pmap));
+
+%grab the non-nan elements of pmap
+p_nums=intersect(pmap,p_nums);
+
+p_tot=numel(p_nums);
 
 if PCA_Setup.PCA_EBSD==1
     %read the 1st pattern to get dimensions
@@ -44,14 +50,18 @@ if PCA_Setup.PCA_EBSD==1
     phigh=size(pat_example,1);
 end
 
+if PCA_Setup.SpatialKernel==1
+    pat_example_bg=pat_example; %lazy coding from me - this is because we want to skip bg-correction until after spatial kernel if required
+end
+
 %create a list of pattern numbers that correspond to
 %the grid positions you want
-p_nums=zeros(p_tot,1);
-for p=1:p_tot
-    p_nums(p)=Data_InputMap.PMap(y_grid(p),x_grid(p));
-%     y_p(p)=y_grid(p);
-%     x_p(p)=x_grid(p);
-end
+% p_nums=zeros(p_tot,1);
+% for p=1:p_tot
+%     p_nums(p)=Data_InputMap.PMap(y_grid(p),x_grid(p));
+% %     y_p(p)=y_grid(p);
+% %     x_p(p)=x_grid(p);
+% end
 
 %find the continguous blocks
 [p_sort,p_order]=sort(p_nums);
@@ -77,33 +87,58 @@ if PCA_Setup.PCA_EBSD==1
     end
 
     %background correct
-    for n=1:p_tot
-        [ ebspBG_tile(:,:,n)] = EBSP_BGCor( ebsp_tile(:,:,n),Settings_Cor );
-    end
-
-    %create the BG map array
-    ebspBG_map=zeros(size(pat_example_bg,1),size(pat_example_bg,2),yn,xn);
-    ebsp_map=zeros(size(pat_example,1),size(pat_example,2),yn,xn);
-
-    %reconstruct this into a map
-    %this is not the fastest way to do this, but it is the most readable
-    %it is also only done in RAM
-    for xi=1:xn
-        for yi=1:yn
-            %go from counter to real space
-            y_r=y_grid(yi,xi);
-            x_r=x_grid(yi,xi);
-            %go to captured points
-            p_i=Data_InputMap.PMap(y_r,x_r);
-
-            %link to the sorted chunks
-            s_n=find(p_sort==p_i);
-
-            %put in the map
-            ebspBG_map(:,:,yi,xi)=ebspBG_tile(:,:,s_n);
-            ebsp_map(:,:,yi,xi)=ebsp_tile(:,:,s_n);
+    if PCA_Setup.SpatialKernel==0 %don't bg correct YET if going to use a spatial kernel later
+        for n=1:p_tot
+            [ ebspBG_tile(:,:,n)] = EBSP_BGCor( ebsp_tile(:,:,n),Settings_Cor );
         end
+    else
+        ebspBG_tile=ebsp_tile;
     end
+    
+    clear ebsp_tile
+
+%     %create the BG map array
+%     %ebspBG_map=zeros(size(pat_example_bg,1),size(pat_example_bg,2),yn,xn);
+%     ebspBG_map=cell(yn,xn);
+%     ebsp_map=cell(yn,xn);
+%     %ebsp_map=zeros(size(pat_example,1),size(pat_example,2),yn,xn);
+% 
+%     %reconstruct this into a map
+%     %this is not the fastest way to do this, but it is the most readable
+%     %it is also only done in RAM
+
+i=1;
+ebspBG_map=zeros(size(pat_example_bg,1),size(pat_example_bg,2),p_tot);
+
+tile.xloaded=zeros(p_tot,1);
+tile.yloaded=zeros(p_tot,1);
+
+for xi=1:xn
+    for yi=1:yn
+        %go from counter to real space
+        y_r=y_grid(yi,xi);
+        x_r=x_grid(yi,xi);
+
+        %go to captured points
+        p_i=Data_InputMap.PMap(y_r,x_r);
+
+        if isnan(p_i)
+            continue
+        end
+
+        %link to the sorted chunks
+        s_n=find(p_sort==p_i);
+
+        %put in the map
+        ebspBG_map(:,:,i)=ebspBG_tile(:,:,s_n);
+%           ebsp_map{yi,xi}=ebsp_tile(:,:,s_n);
+
+        tile.xloaded(i)=xi;
+        tile.yloaded(i)=yi;
+        i=i+1;
+    end
+end
+     clear ebspBG_tile
 end
 
 %% Read the EDS data
@@ -119,9 +154,9 @@ if PCA_Setup.PCA_EDX==1
     end
 
     %create the BG map array
-    EDS_raw_map=zeros(Settings_Cor.channum,yn,xn);
-    EDS_cor_map=zeros(Settings_Cor.channum,yn,xn);
-
+    EDS_cor_map=zeros(Settings_Cor.channum,p_tot);
+    i=1;
+    
     %reconstruct this into a map
     %this is not the fastest way to do this, but it is the most readable
     %it is also only done in RAM
@@ -132,22 +167,32 @@ if PCA_Setup.PCA_EDX==1
             x_r=x_grid(yi,xi);
             %go to captured points
             p_i=Data_InputMap.PMap(y_r,x_r);
+            
+            if isnan(p_i)
+                continue
+            end
 
             %link to the sorted chunks
             s_n=find(p_sort==p_i);
 
             %put in the map
-            EDS_raw_map(:,yi,xi)=EDS_raw_block(:,s_n);
-            EDS_cor_map(:,yi,xi)=EDS_cor_block(:,s_n);
+            EDS_cor_map(:,i)=EDS_cor_block(:,s_n);
+            
+            i=i+1;
         end
     end
+    
+    clear EDS_cor_block EDS_raw_block
+    
 end
 
 %% Convolve with the spatial kernel if required
 
 if PCA_Setup.SpatialKernel==1
     
-    clear ebspBG_tile %for space
+    ebspBG_map=reshape(ebspBG_map,[size(pat_example_bg,1),size(pat_example_bg,2),yn,xn]);
+    
+    %clear ebspBG_tile %for space
     
     pTime('Applying a spatial kernel',t1);
     
@@ -226,9 +271,10 @@ if PCA_Setup.SpatialKernel==1
         end
         
         %fill out the AOI with extra patterns
-        new_ebsp_array=cat(4,left_pats,ebsp_map,right_pats);
+        new_ebsp_array=cat(4,left_pats,ebspBG_map,right_pats);
         new_ebsp_array=cat(3,top_pats,new_ebsp_array,bot_pats);
         
+        clear ebspBG_map
         %convolve for each pixel in the EBSP
 %         for i=1:size(pat_example,1)
 %             parfor j=1:size(pat_example,2)
@@ -268,23 +314,26 @@ if PCA_Setup.SpatialKernel==1
     
     % load the extra required spectra
     if PCA_Setup.PCA_EDX==1
+        
+        EDS_cor_map=reshape(EDS_cor_map,[Settings_Cor.channum,yn,xn]);
+        
         top_spec_cor=zeros(Settings_Cor.channum,size(top,1),size(top,2));
-        top_spec_raw=zeros(Settings_Cor.channum,size(top,1),size(top,2));
+        %top_spec_raw=zeros(Settings_Cor.channum,size(top,1),size(top,2));
         
         left_spec_cor=zeros(Settings_Cor.channum,size(left,1),size(left,2));
-        left_spec_raw=zeros(Settings_Cor.channum,size(left,1),size(left,2));
+        %left_spec_raw=zeros(Settings_Cor.channum,size(left,1),size(left,2));
         
         right_spec_cor=zeros(Settings_Cor.channum,size(right,1),size(right,2));
-        right_spec_raw=zeros(Settings_Cor.channum,size(right,1),size(right,2));
+        %right_spec_raw=zeros(Settings_Cor.channum,size(right,1),size(right,2));
         
         bot_spec_cor=zeros(Settings_Cor.channum,size(bot,1),size(bot,2));
-        bot_spec_raw=zeros(Settings_Cor.channum,size(bot,1),size(bot,2));
+        %bot_spec_raw=zeros(Settings_Cor.channum,size(bot,1),size(bot,2));
         
         for i=1:size(top_spec_cor,2)
             for j=1:size(top_spec_cor,3)
                 [spec_cor,spec_raw]=bReadEDX(MapInfo.EBSPData,top(i,j),Settings_Cor.channum);
                 top_spec_cor(:,i,j)=spec_cor;
-                top_spec_raw(:,i,j)=spec_raw;
+                %top_spec_raw(:,i,j)=spec_raw;
             end
         end
         
@@ -292,7 +341,7 @@ if PCA_Setup.SpatialKernel==1
             for j=1:size(left_spec_cor,3)
                 [spec_cor,spec_raw]=bReadEDX(MapInfo.EBSPData,left(i,j),Settings_Cor.channum);
                 left_spec_cor(:,i,j)=spec_cor;
-                left_spec_raw(:,i,j)=spec_raw;
+                %left_spec_raw(:,i,j)=spec_raw;
             end
         end
         
@@ -300,7 +349,7 @@ if PCA_Setup.SpatialKernel==1
             for j=1:size(right_spec_cor,3)
                 [spec_cor,spec_raw]=bReadEDX(MapInfo.EBSPData,right(i,j),Settings_Cor.channum);
                 right_spec_cor(:,i,j)=spec_cor;
-                right_spec_raw(:,i,j)=spec_raw;
+                %right_spec_raw(:,i,j)=spec_raw;
             end
         end
 
@@ -308,17 +357,19 @@ if PCA_Setup.SpatialKernel==1
             for j=1:size(bot_spec_cor,3)
                 [spec_cor,spec_raw]=bReadEDX(MapInfo.EBSPData,bot(i,j),Settings_Cor.channum);
                 bot_spec_cor(:,i,j)=spec_cor;
-                bot_spec_raw(:,i,j)=spec_raw;
+                %bot_spec_raw(:,i,j)=spec_raw;
             end
         end
         
     
         % fill out the array with extra required spectra
         new_spec_cor_array=cat(3,left_spec_cor,EDS_cor_map,right_spec_cor);
-        new_spec_raw_array=cat(3,left_spec_raw,EDS_raw_map,right_spec_raw);
+        %new_spec_raw_array=cat(3,left_spec_raw,EDS_raw_map,right_spec_raw);
         
         new_spec_cor_array=cat(2,top_spec_cor,new_spec_cor_array,bot_spec_cor);
-        new_spec_raw_array=cat(2,top_spec_raw,new_spec_raw_array,bot_spec_raw);
+        %new_spec_raw_array=cat(2,top_spec_raw,new_spec_raw_array,bot_spec_raw);
+        
+        clear EDS_cor_map 
         
         %convolve for each pixel in the spectrum
 %         parfor i=1:Settings_Cor.channum
@@ -331,24 +382,24 @@ if PCA_Setup.SpatialKernel==1
         for i=extrapts+1:yn+extrapts
             for j=extrapts+1:xn+extrapts
                 spec_cor=zeros(Settings_Cor.channum,1);
-                spec_raw=zeros(Settings_Cor.channum,1);
+                %spec_raw=zeros(Settings_Cor.channum,1);
                 for k=1:length(kernel_linear)
                     spec_cor=spec_cor+new_spec_cor_array(:,i+kernel_x_lin(k),j+kernel_y_lin(k)).*kernel_linear(k);
-                    spec_raw=spec_raw+new_spec_raw_array(:,i+kernel_x_lin(k),j+kernel_y_lin(k)).*kernel_linear(k);
+                    %spec_raw=spec_raw+new_spec_raw_array(:,i+kernel_x_lin(k),j+kernel_y_lin(k)).*kernel_linear(k);
                 end
                 EDS_cor_map(:,i-extrapts,j-extrapts)=spec_cor;
-                EDS_raw_map(:,i-extrapts,j-extrapts)=spec_raw;
+                %EDS_raw_map(:,i-extrapts,j-extrapts)=spec_raw;
             end
         end
         
     end 
-
+     
 end
 
 
 %% add EBSD data to output
 if PCA_Setup.PCA_EBSD==1
-    PatternArray=reshape(ebspBG_map,EBSD_Info.PatSizeH*EBSD_Info.PatSizeW,yn,xn);
+    PatternArray=reshape(ebspBG_map,EBSD_Info.PatSizeH*EBSD_Info.PatSizeW,[]);
     Data.Patterns=PatternArray;
     Data.Patterns_reshaped=reshape(Data.Patterns,size(Data.Patterns,1),size(Data.Patterns,2)*size(Data.Patterns,3));
     Data.Patterns_reshaped_norm=Data.Patterns_reshaped./(std(Data.Patterns_reshaped)); %force a normalisation by stdev even if this wasn't in settings_cor
@@ -356,18 +407,18 @@ end
 
 %%EDS data normalisation
 if PCA_Setup.PCA_EDX==1
-EDSData_cor_map2=reshape(EDS_cor_map(1:Settings_Cor.channum,:,:),[Settings_Cor.channum,size(EDS_cor_map,2)*size(EDS_cor_map,3)]);
-for a=1:size(EDSData_cor_map2,2)
-        integ(a)=sum(EDSData_cor_map2(:,a)); %normalise by intensity
-        EDSData_cor_map2(:,a)=EDSData_cor_map2(:,a)./integ(a);
+EDS_cor_map=reshape(EDS_cor_map(1:Settings_Cor.channum,:),[Settings_Cor.channum,size(EDS_cor_map,2)*size(EDS_cor_map,3)]);
+for a=1:size(EDS_cor_map,2)
+        integ(a)=sum(EDS_cor_map(:,a)); %normalise by intensity
+        EDS_cor_map(:,a)=EDS_cor_map(:,a)./integ(a);
 
 end
-EDSData_cor_map2=EDSData_cor_map2./std(EDSData_cor_map2); %normalise by standard deviation.
+EDS_cor_map=EDS_cor_map./std(EDS_cor_map); %normalise by standard deviation.
 
 %add to data output
-Data.EDSData_cor_map=permute(EDS_cor_map,[2,3,1]);
-Data.EDSData_cor_normvector=EDSData_cor_map2;
-Data.EDSData_raw_map=permute(EDS_raw_map,[2,3,1]);
+%Data.EDSData_cor_map=permute(EDS_cor_map,[2,3,1]);
+Data.EDSData_cor_normvector=EDS_cor_map;
+%Data.EDSData_raw_map=permute(EDS_raw_map,[2,3,1]);
 end
 
 end

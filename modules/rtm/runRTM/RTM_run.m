@@ -94,7 +94,7 @@ else
 end
     
 %Get the average PC - needed for geometry
-Mean_PC=[mean(Data_InputMap.PCX(:)),mean(Data_InputMap.PCY(:)),mean(Data_InputMap.DD(:))];
+Mean_PC=[mean(Data_InputMap.PCX(:),'omitnan'),mean(Data_InputMap.PCY(:),'omitnan'),mean(Data_InputMap.DD(:),'omitnan')];
 [ Mean_EBSD_geom ] = EBSP_Gnom( PatternInfo,Mean_PC);
 
 %need to do this to the size of an array
@@ -141,7 +141,7 @@ else %We're loading from an input stack of patterns
             Full_PC(P_test,:) = [median(PCX(locs)),median(PCY(locs)),median(DD(locs))];
 
        else % get the median from the entire map
-            Full_PC(P_test,:) = [median(PCX(:)),median(PCY(:)),median(DD(:))];
+            Full_PC(P_test,:) = [median(PCX(:),'omitnan'),median(PCY(:),'omitnan'),median(DD(:),'omitnan')];
        end   
     
     %extract the LPT and the FFT

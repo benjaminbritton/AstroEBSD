@@ -96,7 +96,7 @@ if ret_comps<2;
 end
 tile.ret_comps(tiling_no)=ret_comps;
 
-%% Run the PCA with optimised number of retained components
+%% Reduce and rotate with optimised number of components
 pTime(['Tile ',num2str(tiling_no),' selected ',num2str(ret_comps),' components.'],t1);
 rPCA_aoi_VMrotation
 
@@ -111,7 +111,19 @@ end
 if PCA_Setup.PCA_EDX==1
     av_spectra=zeros(2048,ret_comps);
     for ind=1:ret_comps;
-        locs=find(VMOutput.PCA_VM_num==ind);
+        
+        %location in full map assigned to this component number
+        [fullmap_loc]=find(VMOutput.PCA_VM_num==ind);
+        
+        %preallocate locations
+        locs=zeros(size(fullmap_loc));
+        
+        %cycle through the locs and grab where that spatial location was in
+        %the testarray 
+        for l=1:length(fullmap_loc)
+            locs(l)=find(fullmap_loc(l)==tile.xy_loc);
+        end
+        
         rawspectra=testArray(end-2047:end,locs);
         av_spectra(:,ind)=mean(rawspectra,2);
         clear rawspectra locs

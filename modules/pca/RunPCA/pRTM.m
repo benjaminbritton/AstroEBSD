@@ -29,7 +29,7 @@ title('RTM phase assignment')
 hcb1=colorbar;
 pbaspect([1.33,1,1])
 set(gca,'XTickLabel',''); set(gca,'YTickLabel','')
-caxis(gca,[1,10]);
+caxis(gca,[0,10]);
 
 axes(hsub(2))
 %subplot(2,3,2)
