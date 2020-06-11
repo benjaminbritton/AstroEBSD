@@ -25,6 +25,7 @@ ComponentMap=tile.map_reshaped;
 
 % Template match
 RTM.ComponentMap=tile.map_reshaped;
+
 RTM=RTM_run(InputUser,RTM,Settings_Cor,MicroscopeData,MapInfo,t1); %input patterns exist so should default to using these.
     
 %% Assign to PCA label locations etc

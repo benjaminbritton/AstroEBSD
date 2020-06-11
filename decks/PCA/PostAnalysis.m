@@ -12,14 +12,14 @@ clear all
 home
 
 % Set up and locate plugins
-InputUser.MTEX_loc='C:\Communal_MatlabPlugins\mtex-5.2.beta2';
-InputUser.Astro_loc='C:\Users\tpm416\Documents\GitHub\AstroEBSD';
+InputUser.MTEX_loc='C:\CommunalMatlab_plugins\mtex-5.2.beta2';
+InputUser.Astro_loc='I:\TomMcA\GitHub\AstroEBSD_v2';
 
 run([InputUser.MTEX_loc,'\startup_mtex']);
 run([InputUser.Astro_loc,'\start_AstroEBSD']);
 
 % Can provide a list of files, or just specify a directory
-list={'C:\Users\tpm416\Documents\Einsle_PCAOutput\simplectite_EBSD_map_EBSD+EDS'};
+list={'I:\TomMcA\PCA_output\SuperalloyExample_EBSD+EDS'};
 
 %folders=["I:\TomMcA\PCA_output\trialCr+Ti_EBSD+EDS"];
 %cd(folders)
@@ -29,7 +29,7 @@ list={'C:\Users\tpm416\Documents\Einsle_PCAOutput\simplectite_EBSD_map_EBSD+EDS'
 %%
 %inds=1;%comment this out if you want to run for all datasets in list, otherwise it will just do this index
 
-namesetting='weighting1_vt0,05'; %the name of the analyses you want to do on this list
+namesetting='weighting1_vt0,1_Guo_rad3'; %the name of the analyses you want to do on this list
 
 %analyse single tile? Unless you specifically want to do this keep as 0.
 post.singletile=0; %0 by default ; May need to be turned on for older PCA
@@ -43,9 +43,9 @@ post.EBSD=1; %plot IPFs and colour keys
 % saved directories (in Bruker export style). Example is provided in the
 % repository
 
-post.RCSpectra=0; %plot RC spectra quant
+post.RCSpectra=1; %plot RC spectra quant
 post.RCSpectra_std=1; %include standard deviation lines on the radar plot
-post.AvSpectra=0; %plot average spectra quant
+post.AvSpectra=1; %plot average spectra quant
 post.AvSpectra_std=1; %include standard deviation lines on the radar plot
 
 post.comb=[4,6,7;4,6,9;7,4,9]; %element combinations for combo EDS maps %[r1,g1,b1;r2,g2,b2;r3,g3,b3];

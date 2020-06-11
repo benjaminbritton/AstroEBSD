@@ -24,11 +24,11 @@
 clear variables; close all;
 
 %% DIRECTORIES info %%
-InputUser.HDF5_folder='E:\Ben\JI_Data'; %folder where the h5/bcf is located
+InputUser.HDF5_folder='E:\Tom'; %folder where the h5/bcf is located
 
 % Cell array of .H5 files to run PCA on: can be everything in the
 % directory, or specific filenames. Example syntax:
-files= {'simplectite_EBSD_map.h5'};
+files= {'SuperalloyExample.h5'};
 
 % Can also do:
 %filelist=dir([InputUser.HDF5_folder,'/*.h5']);
@@ -36,16 +36,11 @@ files= {'simplectite_EBSD_map.h5'};
 %clear filelist
 
 % This is the folder in which the outputs will be saved.
-InputUser.SavingFolder='C:\Users\tpm416\Documents\Einsle_PCAOutput';
+InputUser.SavingFolder='C:\Users\tpm416\Documents\PCA_Output';
 
 % Plugin locations
 InputUser.MTEX_loc='C:\Communal_MatlabPlugins\mtex-5.2.beta2';
 InputUser.Astro_loc='C:\Users\tpm416\Documents\GitHub\AstroEBSD';
-
-% - These are default locations but you can change them if required - 
-% .bin, .pha and .cif file locations
-RTM_setup.Bin_loc=fullfile(InputUser.Astro_loc,'phases','masterpatterns');
-RTM_setup.Phase_Folder=fullfile(InputUser.Astro_loc,'phases');
 
 %% CRITICAL settings and setup - these determine which analysis to run.
 % YES = 1, NO = 0
@@ -53,7 +48,7 @@ RTM_setup.Phase_Folder=fullfile(InputUser.Astro_loc,'phases');
 %These need to be the names of '.pha' files in the '\phases\phasefiles'
 %folder. There need to be corresponding '.cif' and '.BIN' files in 'cifs'
 %and 'masterpatterns' folders. - Only relevant to RTM analyses.
-InputUser.Phases={'augite','bytownite','bytownite2','pigeonite'};
+InputUser.Phases={'Ni','ZrC','M6C'};
 
 % Run PCA on EBSD, EDX, or both
 PCA_Setup.PCA_EBSD=1;
@@ -69,11 +64,11 @@ PCA_Setup.RTM=1;
 % Introduce a spatial weighting kernel after Guo et al [4]
 % This will be convolved with the data matrix with stride 1 - each pattern
 % is a weighted sum of its kernel. Kernel fn can be adjusted in LL settings.
-PCA_Setup.SpatialKernel=0;
+PCA_Setup.SpatialKernel=1;
 PCA_Setup.KernelRadius=3;%n in pixels - must be ODD
 
 % Pattern centre refinement settings
-Refine.run=0; %Do you want RTM PC refinement to run? If = 0 uses .h5 loaded PC model.
+Refine.run=1; %Do you want RTM PC refinement to run? If = 0 uses .h5 loaded PC model.
 Refine.phase=1; %Which phase number do you want to select points for? (Number in InputUser.Phases)
 
 %% MEDIUM LEVEL settings - you may fairly frequently want to change these.
@@ -81,10 +76,10 @@ printing=1; % Do you want files to display and save?
 
 % Dimension of square tiling (3 = 3x3 grid) %select '1' if no tiling wanted
 % This has a big effect on RAM
-PCA_Setup.crop_factor=2;
+PCA_Setup.crop_factor=3;
 
 % This systematically chooses number of components to retain in the tiles
-PCA_Setup.variance_tolerance=0.05;% in percent. (0.1)
+PCA_Setup.variance_tolerance=0.1;% in percent. (0.1)
 
 % Square dimension EBSPs are cropped to - this has a big effect on RAM
 RTM_setup.screensize=200; %(120 - 300 usual)
@@ -110,7 +105,7 @@ PCA_Setup.KernelFunction = @(distance,r) ((1 - (distance)./r).^2).^2;
 % AstroEBSD based background correction
 Settings_Cor.gfilt=1; %use a high pass filter (1)
 Settings_Cor.gfilt_s=4; %low pass filter sigma (4)
-Settings_Cor.radius=0; %use a radius mask (0)
+Settings_Cor.radius=1; %use a radius mask (0)
 Settings_Cor.radius_frac=0.85; %fraction of the pattern width to use as the mask (0.85)
 Settings_Cor.hotpixel=0; %hot pixel correction (0)
 Settings_Cor.hot_thresh=1000; %hot pixel threshold (1000)
@@ -121,7 +116,7 @@ Settings_Cor.RealBG=0; %use a real BG (0)
 %Settings_Cor.EBSP_bgnum=30; (30)
 Settings_Cor.Square=1; %square crop (1)
 Settings_Cor.SquareCrop=1; %(1)
-Settings_Cor.LineError=0; %(1)
+Settings_Cor.LineError=1; %(1)
 Settings_Cor.MeanCentre=1; %(1)
 Settings_Cor.channum=2048; % channels in the EDS spectra (if any) - usually 2048
 

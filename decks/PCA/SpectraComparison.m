@@ -13,8 +13,8 @@ home
 
 %Choose the input patterns (RC-EBSPs) you want to compare to library.
 %These will be created from the PCA_deck file
-load('C:\Users\tpm416\Documents\Einsle_PCAOutput\simplectite_EBSD_map_EBSD+EDS\weighting1_vt0,05\Results.mat');
-cd('C:\Users\tpm416\Documents\Einsle_PCAOutput\simplectite_EBSD_map_EBSD+EDS\weighting1_vt0,05')
+load('asdf\Results.mat');
+cd('asdf\weighting1_vt0,05')
 
 % Set up and locate plugins
 InputUser.MTEX_loc='C:\Communal_MatlabPlugins\mtex-5.2.beta2';
@@ -23,13 +23,8 @@ InputUser.Astro_loc='C:\Users\tpm416\Documents\GitHub\AstroEBSD';
 run([InputUser.MTEX_loc,'\startup_mtex']);
 run([InputUser.Astro_loc,'\start_AstroEBSD']);
 
-%colourmap - this will probably need adjusting!
-cmap2=cbrewer('qual','Dark2',15); %can be useful to change the number in here dep on how many phases you are using
-cmap=cmap2([1,6,11,15],:);
-
-%% grab the energies (weren't saved at the time)
-[MapInfo.MapData,MicroscopeData,PhaseData,MapInfo.EBSPData ]=bReadHDF5( InputUser );
-x=MapInfo.MapData.EDS.energies;
+%colourmap
+cmap=cbrewer('qual','Dark2',15); %can be useful to change the number in here dep on how many phases you are using
 
 %% Average-spectra
 phaselocs=cell(size(InputUser.Phases));
@@ -52,7 +47,7 @@ for phase=1:size(InputUser.Phases,2)
     region(:,1)=meanspectra_by_phase{phase}-stderror_by_phase{phase};
     region(:,2)=2.*stderror_by_phase{phase};
 
-    h=area(x,region,'LineStyle','none','FaceColor',cmap(phase,:));
+    h=area(region,'LineStyle','none','FaceColor',cmap(phase,:));
     hold on
     h(1).FaceColor=[1,1,1];
     h(1).FaceAlpha=0;
@@ -61,16 +56,13 @@ for phase=1:size(InputUser.Phases,2)
     xlim([1,1000]);
    
 
-    p(phase)=plot(x,meanspectra_by_phase{phase},'Color',0.8.*cmap(phase,:),'LineWidth',1);
+    p(phase)=plot(meanspectra_by_phase{phase},'Color',0.8.*cmap(phase,:),'LineWidth',1);
     
     plotted(phase)=~isnan(region(1,1));
 
 end
-xlim([-2,10])
+xlim([1,800])
 ylim([0,12])
-
-xlabel('keV')
-ylabel('Intensity')
 
 legend(p(plotted),InputUser.Phases(plotted))
 print('Av_spectra','-dpng','-r300')
@@ -97,7 +89,7 @@ for phase=1:size(InputUser.Phases,2)
     region(:,1)=meanspectra_by_phase{phase}-stderror_by_phase{phase};
     region(:,2)=2.*stderror_by_phase{phase};
 
-    h=area(x,region,'LineStyle','none','FaceColor',cmap(phase,:));
+    h=area(region,'LineStyle','none','FaceColor',cmap(phase,:));
     hold on
     h(1).FaceColor=[1,1,1];
     h(1).FaceAlpha=0;
@@ -107,17 +99,12 @@ for phase=1:size(InputUser.Phases,2)
     
     xlim([1,1000]);
 
-    p(phase)=plot(x,meanspectra_by_phase{phase},'Color',0.8.*cmap(phase,:),'LineWidth',1);
+    p(phase)=plot(meanspectra_by_phase{phase},'Color',0.8.*cmap(phase,:),'LineWidth',1);
     
     plotted(phase)=~isnan(region(1,1));
 
 end
-
-
-xlim([-2,10])
-ylim([0,800])
-xlabel('keV')
-ylabel('Intensity')
+xlim([1,800])
 
 legend(p(plotted),InputUser.Phases(plotted));
 print('RC-spectra','-dpng','-r300')
@@ -149,7 +136,7 @@ for phase=1:size(InputUser.Phases,2)
         region(:,1)=meanspectra_by_phase{phase}-stderror_by_phase{phase};
         region(:,2)=2.*stderror_by_phase{phase};
 
-        h=area(x,region,'LineStyle','none','FaceColor',c);
+        h=area(region,'LineStyle','none','FaceColor',c);
         hold on
         h(1).FaceColor=[1,1,1];
         h(1).FaceAlpha=0;
@@ -158,20 +145,17 @@ for phase=1:size(InputUser.Phases,2)
         h(2).FaceAlpha=0.2;
         xlim([1,1000]);
 
-        p2(type)=plot(x,meanspectra_by_phase{phase},'LineWidth',1,'Color',0.8.*c);
+        p2(type)=plot(meanspectra_by_phase{phase},'LineWidth',1,'Color',0.8.*c);
 
         plotted(phase)=~isnan(region(1,1));
     end
     hold off
 
-xlim([-2,10])
+xlim([1,800])
 ylim([0,12])
-xlabel('keV')
-ylabel('Intensity')
+print([InputUser.Phases{phase},'_RC-average_comparison'],'-dpng','-r300')
 
 legend(p2,'RCC','Average')
-
-print([InputUser.Phases{phase},'_RC-average_comparison'],'-dpng','-r300')
 
 end
 

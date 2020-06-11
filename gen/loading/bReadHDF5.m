@@ -200,14 +200,5 @@ catch
     end
 end
 
-%read the EDS energy bins
-try
-    MapData.EDS.energies=h5read(InputUser.HDF5FullFile,[HDF5_info.Groups.Name    '/EDX1/Header/Energy']);
-catch
-end
-
-
-
-
 
 end
