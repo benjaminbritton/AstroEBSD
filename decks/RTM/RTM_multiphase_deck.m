@@ -36,10 +36,10 @@ run(fullfile(InputUser.Astro_loc,'start_AstroEBSD.m')); %start astro
 
 InputUser.HDF5_folder='E:\Tom'; %folder location for the BCF/HDF5 file
 InputUser.HDF5_file = 'SuperalloyExample.h5'; %name of the BCF/HDF5 file
-InputUser.Phases  = {'Ni','ZrC'}; %name of the phase you are indexing
+InputUser.Phases  = {'Ni','M6C'}; %name of the phase you are indexing
 
 RTM.screensize = 128; %size of the library patterns and the resize of the raw EBSPs
-RTM.Sampling_Freq=7; %Set the SO(3) sampling freq in degrees
+RTM.Sampling_Freq=8; %Set the SO(3) sampling freq in degrees
 RTM.iterations = 4;%Set the number of iterations to do in the refinement step
 RTM.LPTsize = 500; %LPT size used in pixels
 
@@ -63,7 +63,8 @@ Settings_CorX.SplitBG=1; %deal with a split screen
 %% now run the code
 RTM.Phase_Folder = fullfile(InputUser.Astro_loc,'phases'); %location of the AstroEBSD phases super-folder
 RTM.Bin_loc = fullfile(RTM.Phase_Folder,'masterpatterns'); %location of the binary files used for RTM
-RTM.parsearch=2;
+RTM.parsearch=1;
+RTM.Normalise=1;
 
 [MapInfo.MapData,MicroscopeData,PhaseData,MapInfo.EBSPData ]=bReadHDF5( InputUser );
 [MapInfo.Data_InputMap] = EBSD_Map(MapInfo.MapData,MicroscopeData);

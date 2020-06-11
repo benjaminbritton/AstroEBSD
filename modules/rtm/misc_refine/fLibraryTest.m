@@ -1,4 +1,4 @@
-function [Library_G,Library_PH]=fLibraryTest(template_library,library_G,FFTData_Ref,SettingsXCF,XCF_data_fill,usepar)
+function [Library_G,Library_PH,pd_params]=fLibraryTest(template_library,library_G,FFTData_Ref,SettingsXCF,XCF_data_fill,usepar)
 %Test the library for template matches and return the best orientation
 
 library_size=size(library_G,3);
@@ -25,6 +25,12 @@ end
 
 %find the max cross correlation
 [Library_PH,max_index]=max(RegOut1(:,4));
+
+%get some stats on the distribution
+%[h,p]=chi2gof(log(RegOut1(:,4)));
+%pd{1}=fitdist(RegOut1(:,4),'logLogistic');
+pd_params(1)=mean(exp(RegOut1(:,4)));
+pd_params(2)=std(exp(RegOut1(:,4)));
 
 %find the orientation matrix
 Library_G = library_G(:,:, max_index);
