@@ -38,7 +38,7 @@ pmap=Data_InputMap.PMap(tile.rowstart(tiling_no):tile.rowfin(tiling_no),tile.col
 p_nums=pmap(~isnan(pmap));
 
 %grab the non-nan elements of pmap
-p_nums=intersect(pmap,p_nums);
+%p_nums=intersect(pmap,p_nums);
 
 p_tot=numel(p_nums);
 
@@ -107,8 +107,10 @@ if PCA_Setup.PCA_EBSD==1
 %     %this is not the fastest way to do this, but it is the most readable
 %     %it is also only done in RAM
 
-i=1;
+skipped=0;
 ebspBG_map=zeros(size(pat_example_bg,1),size(pat_example_bg,2),p_tot);
+
+pmap2=zeros(p_tot,1);
 
 tile.xloaded=zeros(p_tot,1);
 tile.yloaded=zeros(p_tot,1);
@@ -116,26 +118,26 @@ tile.yloaded=zeros(p_tot,1);
 for xi=1:xn
     for yi=1:yn
         %go from counter to real space
-        y_r=y_grid(yi,xi);
-        x_r=x_grid(yi,xi);
-
         %go to captured points
-        p_i=Data_InputMap.PMap(y_r,x_r);
+        p_i=pmap(yi,xi);
 
         if isnan(p_i)
             continue
+            skipped=skipped+1; %track skipped
         end
 
         %link to the sorted chunks
         s_n=find(p_sort==p_i);
-
+        
         %put in the map
+        
+        i=sub2ind([yn,xn],yi,xi)-skipped;
+        pmap2(i)=p_i;
         ebspBG_map(:,:,i)=ebspBG_tile(:,:,s_n);
 %           ebsp_map{yi,xi}=ebsp_tile(:,:,s_n);
 
         tile.xloaded(i)=xi;
         tile.yloaded(i)=yi;
-        i=i+1;
     end
 end
      clear ebspBG_tile

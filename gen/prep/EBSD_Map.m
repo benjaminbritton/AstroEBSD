@@ -34,7 +34,9 @@ pv_list=sub2ind(double([MicroscopeData.NCOLS MicroscopeData.NROWS]),double(MapDa
 [pv_list2,ix]=sort(pv_list);
 pv_list_set=1:size(pv_list2);
 
-contents={'PMap','DD','MAD','Phase','MADPhase','NIndexedBands','PCX','PCY','PHI','phi2','XBeam','YBeam','phi1','RadonQuality','XSample','YSample'};
+AreaData.PMap=reshape(pv_list_set(ix),[NCOLS NROWS])';
+   
+contents={'DD','MAD','Phase','MADPhase','NIndexedBands','PCX','PCY','PHI','phi2','XBeam','YBeam','phi1','RadonQuality','XSample','YSample'};
 for i=1:length(contents)
     area=fullarray;
     try
