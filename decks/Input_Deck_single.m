@@ -4,7 +4,7 @@ home
 close all
 
 %load key folders into the path
-Astro_FP= 'C:\Users\bbrit\Documents\GitHub\AstroEBSD'; %please change this to your astro file path
+Astro_FP= 'C:\Users\bbrit\Documents\GitHub\AstroEBSD\'; %please change this to your astro file path
 
 InputUser.Mode = 'Isolated'; %modes = 
                              %Isolated = single file 
@@ -25,7 +25,7 @@ InputUser.BCF_folder='';
 InputUser.EBSD_folder='';
 
 %build the phases
-InputUser.Phase_Folder = fullfile(Astro_FP,'phases');
+InputUser.Phase_Folder = fullfile(Astro_FP,'phases\phasefiles');
 InputUser.Phase_Input  = {'Ti_Alpha'}; %Si, Ferrite
 % InputUser.Phase_Input={'Ti','Ti_Beta'};
 %chose the folder for output
