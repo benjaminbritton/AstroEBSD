@@ -92,7 +92,7 @@ Ry=@(theta)[cos(theta) 0 sin(theta);0 1 0; -sin(theta) 0 cos(theta)]; %y rotatio
 [rotmat_best,regout] = refine4(PatternCor,PC_refined,EBSP_av,rotmat_1st,Rx,Ry,Rz,SettingsXCF,SettingsXCF2,correction,screen_int,RTM_info.isHex,RTM.LPTsize,RTM.iterations); 
 
 eang_template=conv_G_to_EA(rotmat_best*inv(Detector_tilt));
-TemData(:,1)=[eang_template regout]';
+TemData(:,1)=[eang_template' regout]';
 
 ph=TemData(7,:);
 Phi1_Temp=TemData(1,:);
@@ -193,7 +193,7 @@ else
     [rotmat_best,regout] = refine4(PatternCor,PC_refined,EBSP_av,rotmat_1st,Rx,Ry,Rz,SettingsXCF,SettingsXCF2,correction,screen_int,RTM_info.isHex,RTM.LPTsize,RTM.iterations); 
 
     eang_template=conv_G_to_EA(rotmat_best*inv(Detector_tilt));
-    TemData(:,1)=[eang_template regout]';
+    TemData(:,1)=[eang_template' regout]';
 
     ph=TemData(7,:);
     Phi1_Temp=TemData(1,:);

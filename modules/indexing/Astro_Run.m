@@ -213,7 +213,7 @@ catch err %% catch any errors tha happen
     
   
     %save this data with a timestamp
-    save(fullfile(InputUser.FolderOut,[InputUser.EBSD_File '_' InputUser.FileOut '_' pNameClock '.mat']));
+%     save(fullfile(InputUser.FolderOut,[InputUser.EBSD_File '_' InputUser.FileOut '_' pNameClock '.mat']));
         
     rethrow(err)
 end

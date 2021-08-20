@@ -61,6 +61,7 @@ end
 
 %convert XSample and YSample to X and Y
 try
+    
     prop.x=prop.XSample;
     prop.y=prop.YSample;
     
@@ -106,7 +107,12 @@ if nargin > 3
 end
 
 %create the EBSD container
-ebsd = EBSD(ori, phaseassign,cslist,'options',prop);
+try
+    ebsd = EBSD(ori, phaseassign,cslist,'options',prop);
+catch
+    ebsd=EBSD(ori, phaseassign,cslist,prop);
+end
+
 end
 
 %remove fields from a structure

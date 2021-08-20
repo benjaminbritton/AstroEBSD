@@ -31,8 +31,18 @@ fullarray=zeros(MicroscopeData.NROWS,MicroscopeData.NCOLS);
 fullarray=fullarray.*nan;
 
 pv_list=sub2ind(double([MicroscopeData.NCOLS MicroscopeData.NROWS]),double(MapData.XBeam),double(MapData.YBeam));
+
+pvlist_max=double(MicroscopeData.NCOLS*MicroscopeData.NROWS);
+pv_list_set=1:pvlist_max;
+
+%deal with an incomplete array
+if numel(pv_list) ~= numel(pv_list_set)
+    pv_list=[pv_list;nan(numel(pv_list_set)-numel(pv_list),1)];
+end
+
+pv_list_there=pv_list(~isnan(pv_list));
+
 [pv_list2,ix]=sort(pv_list);
-pv_list_set=1:size(pv_list2);
 
 AreaData.PMap=reshape(pv_list_set(ix),[NCOLS NROWS])';
    
@@ -50,7 +60,7 @@ for i=1:length(contents)
        continue
     end
         
-    area(pv_list)=vals;
+    area(pv_list_there)=vals;
     area=reshape(area,size(area,2),size(area,1));
     area=area(mincol:mincol+NCOLS-1,minrow:minrow+NROWS-1)';
 
