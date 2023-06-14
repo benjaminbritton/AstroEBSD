@@ -3,6 +3,7 @@
 % high dynamic range on-axis transmission kikuchi diffraction pattern (TKP)
 %
 % Originally scripted by Tianbi Zhang in November 2022 with major rework in April 2023
+% Annotated in April-June 2023
 % For how this script works, please refer to our paper
 % 
 % Pre-requisite: MATLAB Image Processing & Statistics and Machine Learning Toolbox
@@ -53,7 +54,7 @@ path2 = 'PhD\TKD\Al_HDR\Demo';
 
 
 % Please fill in the file names in decreasing order of exposure time. The
-% file corresponding to the baseline exposure time t0 should be the 
+% file corresponding to the baseline exposure time t0 (the longest in the set) should be the 
 % first one.
 h5filenames = {'spot1_50f_01s.h5','spot1_50f_001s.h5', 'spot1_50f_0005s.h5','spot1_50f_0001s_Event.h5'}; 
 sampleID =  ["0.1s Exposure", "0.01s Exposure", "0.005s Exposure", "0.001s Exposure"];
@@ -73,6 +74,8 @@ for i=1:numfiles
         end
     end
 end
+
+% note: for the "demo" data, due to a mistake in collection, the event and iToT subframes are separated into 2 files. Thi resuslts in the extra if-else on lines 70-74. For other data, you can comment out lines 72-73.
 
 %% Identify saturated domains 
 satdomains = cell(1,numfiles);
@@ -102,7 +105,7 @@ for j=2:numfiles
     eventratio(:,j-1) = reference_data(fillingdomains{1})./ current_data(fillingdomains{1});
 end
 
-eventratio(isinf(eventratio)) = NaN;
+eventratio(isinf(eventratio)) = NaN; % account for dead pixels
 
 clear reference_data current_data;
 
@@ -267,29 +270,7 @@ end
 subplot(1,numpats,numpats);
 imagesc(stitched_flat_gaus); axis xy; axis image; axis off; colormap('gray');
 
-
-%% Side scripts B: extract top rectangle and get fft
-for k=1:numfiles
-pattern = reshape(rawdata(:,k),[254 254]);
-raw_crop{k} = imcrop(pattern, cropped_rect);
-end
-
-fft_crop = cell(1,numpats);
-fft_crop{end} = log10(abs(fftshift(fft2(raw_crop{end} .* fft_window))));
-
-figure;
-for m=1:(numpats)
-fft_crop{m} = log10(abs(fftshift(fft2(raw_crop{m} .* fft_window))));
-subplot(3,numpats,m);
-imagesc(raw_crop{m}); axis xy; axis image; colormap('gray'); axis off;
-title(sampleID{m});
-subplot(3,numpats,m+numpats);
-imagesc(fft_crop{m});  axis xy; axis image; colormap('gray'); axis off;
-subplot(3,numpats,m+2*numpats);
-imagesc(raw_crop{m} .* fft_window);  axis xy; axis image; colormap('gray'); axis off;
-end
-
-% Side script 3: histogram
+%% intenssity histogram
 figure;
 histogram(stitchedpattern_16, 200,'EdgeColor','none','Normalization','count');
 hold on;
@@ -299,7 +280,7 @@ ylabel("Pixel count");
 legend("Raw stitched","Background corrected");
 grid on;
 
-%side script 4:angle contours
+%% angle contours
 f3 = figure;
 h2 = axes; 
 p2 = imagesc(stitched_flat_gaus);
@@ -314,7 +295,7 @@ clabel(p3,h4,'color','yellow', 'fontsize',20);
 set(h3,'ydir', 'normal');
 linkaxes([h2 h3]);
 
-%side script 5: filling zone contours
+%% filling zone contours (for easier visualization)
 fillingcontour = zeros(254^2,1);
 
 for i=1:numfiles
@@ -330,6 +311,7 @@ axis xy; axis image;
 
 %% Side Script 6: line profile across a band - need to plot corrected images
 % and relative intensity; almost perfectly perpendicular profiling
+% This section will not work if you don't have a simulated pattern as the reference.
 newsampleID = sampleID;
 newsampleID(end) = "Stitched pattern";
 extendedsampleID = newsampleID;
@@ -352,13 +334,9 @@ simpattern_table = fullfile(path1, path2, 'sim_pattern.csv');
 simpattern = readtable(simpattern_table, opts);
 simpattern = table2array(simpattern);
 
-% meansim = mean(simpattern(:));
-% meanstitched = mean(stitched_flat_gaus(:));
-
-simpattern = simpattern + 0.5;
+simpattern = simpattern + 0.5; % offset to move the band intensities up
 clear opts;
 
-% simpattern = imresize(simpattern, [254 254]);
 figure;
 imagesc(simpattern); axis xy; axis image; colormap('gray'); axis off;
 
