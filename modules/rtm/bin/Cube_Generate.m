@@ -43,9 +43,12 @@ facedata(:,:,1)=fd(:,:,3); %x+
 facedata(:,:,2)=fd(:,:,5); %y+
 facedata(:,:,3)=fd(:,:,1); %z+
 
+
+     
 if isHex == 1 %add in a hexagonal fix
     facedata(:,:,4)=rot90(fd(:,:,1),2);
-    facedata(:,:,5)=rot90(fd(:,:,2),2);
+%     facedata(:,:,5)=rot90(fd(:,:,2),2);
+facedata(:,:,5)=rot90(fd(:,:,2),3); %corrected for Shuheng/Mg
     facedata(:,:,6)=(fd(:,:,3));
 else
     facedata(:,:,4)=fd(:,:,4); %x-
