@@ -1,4 +1,4 @@
-function [ EBSP_out ] = EBSP_gen( EBSP_av,rotmat,screen_int,isHex )
+function [ EBSP_out,r2] = EBSP_gen( EBSP_av,rotmat,screen_int,isHex )
 %EBSP_GEN Generate a pattern for a specific orientation matrix
 
 % This code is copyright Alex Foden and Ben Britton 09/04/2019

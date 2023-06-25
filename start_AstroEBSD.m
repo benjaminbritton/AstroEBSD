@@ -88,6 +88,9 @@ addpath([Astro_FP,link, 'testing']);
 
 addpath([Astro_FP,link, 'outputs']);
 addpath([Astro_FP,link, 'plot']);
+
+addpath([Astro_FP,link, 'modules',link,'ded_tkd']);
+
 addpath([Astro_FP]);
 
 disp('AstroEBSD file paths loaded');
