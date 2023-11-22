@@ -74,6 +74,10 @@ addpath([Astro_FP,link, 'modules',link,'pca',link,'plugins',link,'cbrewer']);
 addpath([Astro_FP,link, 'modules',link,'pca',link,'plugins',link,'Colormaps']);
 addpath([Astro_FP,link, 'modules',link,'pca',link,'RunPCA']);
 
+addpath([Astro_FP,link, 'modules',link,'ded_tkd']);
+addpath([Astro_FP,link, 'modules',link,'ded_general']);
+addpath([Astro_FP,link, 'modules',link,'ded_ebsd']);
+
 
 addpath([Astro_FP,link, 'modules',link,'rtm']);
 addpath([Astro_FP,link, 'modules',link,'rtm',link,'bin']);
