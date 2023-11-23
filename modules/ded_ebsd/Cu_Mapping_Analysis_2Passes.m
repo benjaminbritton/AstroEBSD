@@ -23,10 +23,10 @@ clear;
 home;
 
 %% start up Astro etc.
-InputUser.Astro_loc = 'C:\Users\billy\Documents\GitHub\AstroEBSD';
-InputUser.location_mtex='E:\MATLAB\mtex-5.8.0\';
-run(fullfile(InputUser.Astro_loc,'start_AstroEBSD.m'));
-run(fullfile(InputUser.location_mtex,'startup.m'));
+InputUser.location_mtex="C:\Users\billy\Documents\MATLAB\mtex-5.10.0";
+run(fullfile(InputUser.location_mtex, "startup_mtex.m"));
+InputUser.Astro_loc = "C:\Users\billy\Documents\MATLAB\AstroEBSD-main";
+run(fullfile(InputUser.Astro_loc, "start_AstroEBSD.m"));
 
 %% location of patterns
 pattern_loc='C:\Users\billy\OneDrive - UBC\PhD\TKD\20230807_Cu_EBSD';

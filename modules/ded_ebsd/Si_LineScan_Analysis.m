@@ -20,13 +20,11 @@ clear;
 home;
 
 %% start astro & mtex - please edit the paths!
-
-InputUser.Astro_loc = 'C:\Users\billy\Documents\GitHub\AstroEBSD';
-InputUser.location_mtex='E:\MATLAB\mtex-5.8.0\';
-run(fullfile(InputUser.Astro_loc,'start_AstroEBSD.m'));
-run(fullfile(InputUser.location_mtex,'startup.m'));
-
-pattern_loc = 'C:\Users\billy\OneDrive - UBC\PhD\TKD\20230804_Si_EBSD\Vertscan';
+InputUser.location_mtex="C:\Users\billy\Documents\MATLAB\mtex-5.10.0";
+run(fullfile(InputUser.location_mtex, "startup_mtex.m"));
+InputUser.Astro_loc = "C:\Users\billy\Documents\MATLAB\AstroEBSD-main";
+run(fullfile(InputUser.Astro_loc, "start_AstroEBSD.m"));
+pattern_loc = "C:\Users\billy\OneDrive - UBC\PhD\TKD\20230804_Si_EBSD\Vertscan";
 
 %% Enter pattern information and set up indexing
 eangs=[176.81 19.31 225.90]*pi/180; %demo
@@ -57,7 +55,7 @@ rot_det=R_x(MicroscopeData.TotalTilt);
 
 %% Pattern I/O
 num_pat_ini = 1;
-num_pat_end = 1;
+num_pat_end = 20;
 pattern_root = 'Spot';
 num_pats = num_pat_end - num_pat_ini + 1;
 
