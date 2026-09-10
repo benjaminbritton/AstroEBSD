@@ -1,7 +1,12 @@
 function [fig_info] = ECP_Atlas(Input_Data,ECP_Pat,screen_int,eangs_n,PC_start)
 %tool to plot the ECP from a dynamical pattern and show where you are
 fig_info=figure;
-nexttile;
+
+layout = tiledlayout(1,2);
+layout.TileSpacing = 'tight';
+
+ax1 = nexttile([1 1]);
+
 
 %generate the sterogram
 % [ ~,~,~,~,~, RTM_info ] = Phase_Builder_RTM(Input_Data.Phase_Input,Input_Data.Phase_Folder);
@@ -106,10 +111,10 @@ plot(ecp_4_sx,ecp_4_sy,'m','LineWidth',2);
 
 %% Plot the sphere
 
+ax_s2 = nexttile([1 1]);
 [sx,sy,sz]=sphere(1000);
 [sphere_sim] = Cube_Sample(sx(:),sy(:),sz(:),screen_int,0);
 
-ax_s2=nexttile;
 surf(sx,sy,sz,reshape(sphere_sim,size(sx,1),size(sx,2)),'EdgeColor','none');
 colormap('gray');
 axis off; axis equal;
@@ -132,6 +137,7 @@ plot3(ecp_4_xyz(:,1),ecp_4_xyz(:,2),ecp_4_xyz(:,3),'m');
 scatter3(1,0,0,10,'r','filled');
 scatter3(0,1,0,10,'g','filled');
 scatter3(0,0,1,10,'b','filled');
+fig_info.WindowState='maximized'; %make this full frame
 
 
 end
@@ -161,4 +167,6 @@ line_r_lambda=1./(line_r2n(:,3)+1);
 %convert from r_exp to the stereogram
 line_P_rx=line_r2n(:,1).*line_r_lambda;
 line_P_ry=line_r2n(:,2).*line_r_lambda;
+
+
 end

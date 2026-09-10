@@ -44,3 +44,5 @@ Thumbs.db
 /phases/masterpatterns/*
 modules/AstroECP/refinement_results/Si_SAECP_example.tif
 *.tif
+modules/AstroECP/refinement_results/refinement_results.txt
+modules/AstroECP/refinement_results/Si_SAECP_example.tif

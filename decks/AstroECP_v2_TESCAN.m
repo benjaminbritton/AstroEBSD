@@ -18,11 +18,8 @@
 clear; home; close all;
 
 %% set up the file locations 
-Input_Data.astro_location='D:\OneDrive - UBC\Documents\GitHub\AstroEBSD\';
-Input_Data.mtex_location='D:\OneDrive - UBC\MatLab\mtex-5.11.2\'; 
-
-% Input_Data.astro_location='C:\Users\benja\OneDrive\Documents\GitHub\AstroEBSD\';
-% Input_Data.mtex_location='C:\Users\benja\OneDrive\Documents\MATLAB\mtex-5.11.1\'; 
+Input_Data.astro_location='C:\Users\benja\OneDrive\Documents\GitHub\AstroEBSD\';
+Input_Data.mtex_location='C:\Users\benja\OneDrive\Documents\MATLAB\mtex-5.11.1\'; 
 
 %% ECP location and information
 
@@ -37,8 +34,10 @@ Input_Data.ECP_type='TESCAN'; %supported types: 'TESCAN', 'TFS', 'other'
 Input_Data.PC_in=[0.5 0.5 3.9031]; % starting PC - AstroEBSD convention [PCx, PCy, DD]
 Input_Data.eangs=[87.4431,0.674269,-96.3694]; % for the example pattern 'Si_SAECP_example.tif'
 
+
 %set the greyscale colorlim for the ECP
-Input_Data.ECP_Pat_clim=[2 5]; % default settings of histogram
+% Input_Data.ECP_Pat_clim=[2 5]; % default settings of histogram - regular patterns
+Input_Data.ECP_Pat_clim=[-0.5 1]; % default settings of histogram - used for the BG corrected one
 
 %% TFS data - comment this block out if you want to run the Tescan data
 
